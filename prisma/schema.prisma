@@ -14,16 +14,43 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Game {
+    id          String   @id @default(cuid())
+    title       String
+    createdAt   DateTime @default(now())
+    endingTime  DateTime
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
+    admin     User        @relation(fields: [adminId], references: [id])
+    adminId   String
+    challenges Challenge[]
 
-    @@index([name])
+    @@index([title])
+}
+
+model Challenge {
+    id          String   @id @default(cuid())
+    title       String
+    description String?
+    flag        String
+    pointValue  Int
+    createdAt   DateTime @default(now())
+
+    game     Game         @relation(fields: [gameId], references: [id], onDelete: Cascade)
+    gameId   String
+    submissions Submission[]
+
+    @@index([title])
+}
+
+model Submission {
+    id          String   @id @default(cuid())
+    flag        String
+    createdAt   DateTime @default(now())
+
+    user     User      @relation(fields: [userId], references: [id])
+    userId   String
+    challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+    challengeId String
 }
 
 // Necessary for Next auth
@@ -62,7 +89,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    games         Game[]
+    submissions   Submission[]
 }
 
 model VerificationToken {
