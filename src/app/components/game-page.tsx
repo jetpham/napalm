@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { Separator } from "radix-ui";
 import { ChallengeList } from "./challenge-list";
 import { CreateChallengeForm } from "./create-challenge";
 import { Leaderboard } from "./leaderboard";
@@ -27,9 +28,12 @@ export function GamePage({ gameId, userId }: GamePageProps) {
             <Leaderboard gameId={gameId} />
           </div>
 
+          <Separator.Root />
+
           {/* Main content - challenges */}
           <div>
             <ChallengeList gameId={gameId} userId={userId} />
+            <Separator.Root />
             <CreateChallengeForm gameId={gameId} userId={userId} />
           </div>
         </div>

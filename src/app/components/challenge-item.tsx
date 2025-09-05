@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Form, Separator } from "radix-ui";
 import { api } from "~/trpc/react";
 
 interface ChallengeItemProps {
@@ -77,34 +78,49 @@ export function ChallengeItem({
   const shouldShowFlag = isAdmin || challenge.hasCorrectSubmission || showFlag;
 
   return (
-    <div>
-      <div>
+    <article>
+      <header>
         <h3>{challenge.title}</h3>
-        <span>
+        <span aria-label={`${challenge.pointValue} points`}>
           {challenge.pointValue} points
         </span>
-      </div>
+      </header>
 
       {challenge.description && (
         <p>{challenge.description}</p>
       )}
 
+      <Separator.Root />
+
       {shouldShowInput && (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Enter flag"
-            value={flag}
-            onChange={(e) => setFlag(e.target.value)}
-          />
-          <button
-            type="submit"
-            disabled={submitFlag.isPending}
-          >
-            {submitFlag.isPending ? "Submitting..." : "Submit Flag"}
-          </button>
-        </form>
+        <Form.Root onSubmit={handleSubmit}>
+          <Form.Field name="flag">
+            <Form.Label>Enter flag</Form.Label>
+            <Form.Control asChild>
+              <input
+                type="text"
+                placeholder="Enter flag"
+                value={flag}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFlag(e.target.value)}
+                required
+              />
+            </Form.Control>
+            <Form.Message match="valueMissing">
+              Please enter a flag
+            </Form.Message>
+          </Form.Field>
+          <Form.Submit asChild>
+            <button
+              type="submit"
+              disabled={submitFlag.isPending}
+            >
+              {submitFlag.isPending ? "Submitting..." : "Submit Flag"}
+            </button>
+          </Form.Submit>
+        </Form.Root>
       )}
+
+      {shouldShowInput && shouldShowFlag && <Separator.Root />}
 
       {shouldShowFlag && (
         <div>
@@ -116,6 +132,7 @@ export function ChallengeItem({
           {!isAdmin && !challenge.hasCorrectSubmission && (
             <button
               onClick={handleShowFlag}
+              type="button"
             >
               Show flag
             </button>
@@ -130,10 +147,10 @@ export function ChallengeItem({
       )}
 
       {message && (
-        <div>
+        <div role="status" aria-live="polite">
           {message}
         </div>
       )}
-    </div>
+    </article>
   );
 }

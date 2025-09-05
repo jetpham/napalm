@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-import { CreateGameForm } from "~/app/_components/create-game";
-import { GamesList } from "~/app/_components/games-list";
+import { Separator } from "radix-ui";
+import { CreateGameForm } from "~/app/components/create-game";
+import { GamesList } from "~/app/components/games-list";
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
 
@@ -29,6 +30,7 @@ export default async function Home() {
           {session?.user && (
             <div>
               <CreateGameForm />
+              <Separator.Root />
               <GamesList />
             </div>
           )}

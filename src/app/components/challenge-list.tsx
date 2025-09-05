@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Separator } from "radix-ui";
 import { api } from "~/trpc/react";
 
 import { ChallengeItem } from "./challenge-item";
@@ -43,7 +44,7 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
 
   return (
     <div>
-      <div>
+      <header>
         <h1>{game.title}</h1>
         <p>
           Created by {game.admin.name || game.admin.email}
@@ -52,25 +53,31 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
           Ends: {new Date(game.endingTime).toLocaleString()}
         </p>
         {isGameEnded && (
-          <p>This game has ended.</p>
+          <p role="status" aria-live="polite">This game has ended.</p>
         )}
-      </div>
+      </header>
 
-      <h2>Challenges</h2>
-      {!challenges || challenges.length === 0 ? (
-        <div>No challenges yet.</div>
-      ) : (
-        <div>
-          {challenges.map((challenge) => (
-            <ChallengeItem
-              key={challenge.id}
-              challenge={challenge}
-              isAdmin={isAdmin}
-              isGameEnded={isGameEnded}
-            />
-          ))}
-        </div>
-      )}
+      <Separator.Root />
+
+      <section>
+        <h2>Challenges</h2>
+        {!challenges || challenges.length === 0 ? (
+          <p>No challenges yet.</p>
+        ) : (
+          <div role="list" aria-label="Game challenges">
+            {challenges.map((challenge, index) => (
+              <div key={challenge.id} role="listitem">
+                <ChallengeItem
+                  challenge={challenge}
+                  isAdmin={isAdmin}
+                  isGameEnded={isGameEnded ?? false}
+                />
+                {index < challenges.length - 1 && <Separator.Root />}
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

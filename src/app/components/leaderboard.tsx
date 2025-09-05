@@ -1,5 +1,6 @@
 "use client";
 
+import { Separator } from "radix-ui";
 import { api } from "~/trpc/react";
 
 interface LeaderboardProps {
@@ -31,15 +32,17 @@ export function Leaderboard({ gameId }: LeaderboardProps) {
   }
 
   return (
-    <div>
+    <section>
       <h2>Leaderboard</h2>
-      <div>
+      <ol role="list" aria-label="Game leaderboard">
         {leaderboard.map((entry, index) => (
-          <div
+          <li
             key={entry.user.id}
+            role="listitem"
+            aria-label={`Rank ${index + 1}: ${entry.user.name || entry.user.email} with ${entry.score} points`}
           >
             <div>
-              <span>
+              <span aria-hidden="true">
                 {index === 0
                   ? "🥇"
                   : index === 1
@@ -62,9 +65,10 @@ export function Leaderboard({ gameId }: LeaderboardProps) {
               <div>{entry.score}</div>
               <div>points</div>
             </div>
-          </div>
+            {index < leaderboard.length - 1 && <Separator.Root />}
+          </li>
         ))}
-      </div>
-    </div>
+      </ol>
+    </section>
   );
 }

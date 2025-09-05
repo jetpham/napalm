@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { GamePage } from "~/app/_components/game-page";
+import { GamePage } from "~/app/components/game-page";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
 
