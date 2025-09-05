@@ -108,7 +108,11 @@ export const gameRouter = createTRPCRouter({
       // Filter for correct submissions and group by user
       const userScores = new Map<
         string,
-        { user: any; score: number; challengesSolved: number }
+        {
+          user: { id: string; name: string | null; email: string | null };
+          score: number;
+          challengesSolved: number;
+        }
       >();
 
       for (const submission of submissions) {

@@ -47,7 +47,9 @@ export function CreateGameForm() {
               type="text"
               placeholder="Game Title"
               value={title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
               required
             />
           </Form.Control>
@@ -62,7 +64,9 @@ export function CreateGameForm() {
             <input
               type="datetime-local"
               value={endingTime}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndingTime(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEndingTime(e.target.value)
+              }
               required
             />
           </Form.Control>
@@ -72,10 +76,7 @@ export function CreateGameForm() {
         </Form.Field>
 
         <Form.Submit asChild>
-          <button
-            type="submit"
-            disabled={createGame.isPending}
-          >
+          <button type="submit" disabled={createGame.isPending}>
             {createGame.isPending ? "Creating..." : "Create Game"}
           </button>
         </Form.Submit>
@@ -87,7 +88,8 @@ export function CreateGameForm() {
           <AlertDialog.Content>
             <AlertDialog.Title>Invalid Date</AlertDialog.Title>
             <AlertDialog.Description>
-              Ending time must be in the future. Please select a valid date and time.
+              Ending time must be in the future. Please select a valid date and
+              time.
             </AlertDialog.Description>
             <AlertDialog.Action onClick={() => setShowAlert(false)}>
               OK

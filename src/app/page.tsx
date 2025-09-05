@@ -16,12 +16,8 @@ export default async function Home() {
           <div>
             <h1>Capture The Flag</h1>
             <div>
-              <p>
-                {session && <span>Logged in as {session.user?.name}</span>}
-              </p>
-              <Link
-                href={session ? "/api/auth/signout" : "/api/auth/signin"}
-              >
+              <p>{session && <span>Logged in as {session.user?.name}</span>}</p>
+              <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
                 {session ? "Sign out" : "Sign in"}
               </Link>
             </div>

@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { Separator } from "radix-ui";
 import { api } from "~/trpc/react";
 
@@ -46,14 +44,12 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
     <div>
       <header>
         <h1>{game.title}</h1>
-        <p>
-          Created by {game.admin.name || game.admin.email}
-        </p>
-        <p>
-          Ends: {new Date(game.endingTime).toLocaleString()}
-        </p>
+        <p>Created by {game.admin.name ?? game.admin.email}</p>
+        <p>Ends: {new Date(game.endingTime).toLocaleString()}</p>
         {isGameEnded && (
-          <p role="status" aria-live="polite">This game has ended.</p>
+          <p role="status" aria-live="polite">
+            This game has ended.
+          </p>
         )}
       </header>
 

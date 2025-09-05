@@ -95,7 +95,8 @@ export const challengeRouter = createTRPCRouter({
         },
       });
 
-      const hasCorrectSubmission = userSubmission && userSubmission.flag === challenge.flag;
+      const hasCorrectSubmission =
+        userSubmission && userSubmission.flag === challenge.flag;
 
       if (!isAdmin && !hasCorrectSubmission) {
         throw new Error("Not authorized to view flag");

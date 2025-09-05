@@ -68,7 +68,7 @@ export function ChallengeItem({
     try {
       await getFlag.refetch();
       setShowFlag(true);
-    } catch (error) {
+    } catch {
       setMessage("Unable to show flag");
     }
   };
@@ -86,9 +86,7 @@ export function ChallengeItem({
         </span>
       </header>
 
-      {challenge.description && (
-        <p>{challenge.description}</p>
-      )}
+      {challenge.description && <p>{challenge.description}</p>}
 
       <Separator.Root />
 
@@ -101,7 +99,9 @@ export function ChallengeItem({
                 type="text"
                 placeholder="Enter flag"
                 value={flag}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFlag(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setFlag(e.target.value)
+                }
                 required
               />
             </Form.Control>
@@ -110,10 +110,7 @@ export function ChallengeItem({
             </Form.Message>
           </Form.Field>
           <Form.Submit asChild>
-            <button
-              type="submit"
-              disabled={submitFlag.isPending}
-            >
+            <button type="submit" disabled={submitFlag.isPending}>
               {submitFlag.isPending ? "Submitting..." : "Submit Flag"}
             </button>
           </Form.Submit>
@@ -126,14 +123,14 @@ export function ChallengeItem({
         <div>
           <div>
             <p>
-              Flag: {getFlag.isLoading ? "Loading..." : getFlag.data || "Unable to load flag"}
+              Flag:{" "}
+              {getFlag.isLoading
+                ? "Loading..."
+                : (getFlag.data ?? "Unable to load flag")}
             </p>
           </div>
           {!isAdmin && !challenge.hasCorrectSubmission && (
-            <button
-              onClick={handleShowFlag}
-              type="button"
-            >
+            <button onClick={handleShowFlag} type="button">
               Show flag
             </button>
           )}

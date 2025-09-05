@@ -64,7 +64,9 @@ export function CreateChallengeForm({
               type="text"
               placeholder="Challenge Title"
               value={title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
               required
             />
           </Form.Control>
@@ -79,7 +81,9 @@ export function CreateChallengeForm({
             <textarea
               placeholder="Description (optional)"
               value={description}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setDescription(e.target.value)
+              }
               rows={3}
             />
           </Form.Control>
@@ -92,13 +96,13 @@ export function CreateChallengeForm({
               type="text"
               placeholder="Flag"
               value={flag}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFlag(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setFlag(e.target.value)
+              }
               required
             />
           </Form.Control>
-          <Form.Message match="valueMissing">
-            Please enter a flag
-          </Form.Message>
+          <Form.Message match="valueMissing">Please enter a flag</Form.Message>
         </Form.Field>
 
         <Form.Field name="pointValue">
@@ -108,7 +112,9 @@ export function CreateChallengeForm({
               type="number"
               placeholder="Point Value"
               value={pointValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPointValue(Number(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setPointValue(Number(e.target.value))
+              }
               min="1"
               required
             />
@@ -122,10 +128,7 @@ export function CreateChallengeForm({
         </Form.Field>
 
         <Form.Submit asChild>
-          <button
-            type="submit"
-            disabled={createChallenge.isPending}
-          >
+          <button type="submit" disabled={createChallenge.isPending}>
             {createChallenge.isPending ? "Creating..." : "Create Challenge"}
           </button>
         </Form.Submit>

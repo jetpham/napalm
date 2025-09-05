@@ -41,23 +41,19 @@ export function GamesList() {
                 onClick={() => router.push(`/game/${game.id}`)}
                 type="button"
                 className="w-full text-left"
-                aria-label={`View game: ${game.title}, ${isActive ? "Active" : "Ended"}, Admin: ${game.admin.name || game.admin.email}, ${game._count.challenges} challenges, Ends: ${new Date(game.endingTime).toLocaleString()}`}
+                aria-label={`View game: ${game.title}, ${isActive ? "Active" : "Ended"}, Admin: ${game.admin.name ?? game.admin.email}, ${game._count.challenges} challenges, Ends: ${new Date(game.endingTime).toLocaleString()}`}
               >
                 <div>
                   <h3>{game.title}</h3>
-                  <span aria-label={`Game status: ${isActive ? "Active" : "Ended"}`}>
+                  <span
+                    aria-label={`Game status: ${isActive ? "Active" : "Ended"}`}
+                  >
                     {isActive ? "Active" : "Ended"}
                   </span>
                 </div>
-                <p>
-                  Admin: {game.admin.name || game.admin.email}
-                </p>
-                <p>
-                  Challenges: {game._count.challenges}
-                </p>
-                <p>
-                  Ends: {new Date(game.endingTime).toLocaleString()}
-                </p>
+                <p>Admin: {game.admin.name ?? game.admin.email}</p>
+                <p>Challenges: {game._count.challenges}</p>
+                <p>Ends: {new Date(game.endingTime).toLocaleString()}</p>
               </button>
               {index < games.length - 1 && <Separator.Root />}
             </li>

@@ -17,9 +17,7 @@ export function GamePage({ gameId, userId }: GamePageProps) {
     <main>
       <div>
         <div>
-          <Link href="/">
-            Back to Home
-          </Link>
+          <Link href="/">Back to Home</Link>
         </div>
 
         <div>
