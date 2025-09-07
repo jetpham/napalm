@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Napalm",
   description: "A CTF platform",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  other: {
+    "apple-mobile-web-app-title": "Napalm",
+  },
 };
 
 export default function RootLayout({
