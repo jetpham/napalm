@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { AlertDialog, Form } from "radix-ui";
+import { Form } from "radix-ui";
 import { api } from "~/trpc/react";
 
 export function CreateGameForm() {
   const [title, setTitle] = useState("");
   const [endingTime, setEndingTime] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
+  const [dateError, setDateError] = useState("");
   const router = useRouter();
 
   const utils = api.useUtils();
@@ -22,11 +22,13 @@ export function CreateGameForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setDateError("");
+    
     if (!title || !endingTime) return;
 
     const endingDate = new Date(endingTime);
     if (endingDate <= new Date()) {
-      setShowAlert(true);
+      setDateError("Ending time must be in the future. Please select a valid date and time.");
       return;
     }
 
@@ -64,15 +66,21 @@ export function CreateGameForm() {
             <input
               type="datetime-local"
               value={endingTime}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEndingTime(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setEndingTime(e.target.value);
+                setDateError(""); // Clear error when user changes the date
+              }}
               required
             />
           </Form.Control>
           <Form.Message match="valueMissing">
             Please select an ending time
           </Form.Message>
+          {dateError && (
+            <Form.Message>
+              {dateError}
+            </Form.Message>
+          )}
         </Form.Field>
 
         <Form.Submit asChild>
@@ -82,21 +90,6 @@ export function CreateGameForm() {
         </Form.Submit>
       </Form.Root>
 
-      <AlertDialog.Root open={showAlert} onOpenChange={setShowAlert}>
-        <AlertDialog.Portal>
-          <AlertDialog.Overlay />
-          <AlertDialog.Content>
-            <AlertDialog.Title>Invalid Date</AlertDialog.Title>
-            <AlertDialog.Description>
-              Ending time must be in the future. Please select a valid date and
-              time.
-            </AlertDialog.Description>
-            <AlertDialog.Action onClick={() => setShowAlert(false)}>
-              OK
-            </AlertDialog.Action>
-          </AlertDialog.Content>
-        </AlertDialog.Portal>
-      </AlertDialog.Root>
     </div>
   );
 }

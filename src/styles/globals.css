@@ -1,5 +1,51 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "IBM VGA";
+  src: url("/Web437_IBM_VGA_8x16.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  --font-mono: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: "IBM VGA", monospace;
+  --font-mono: "IBM VGA", monospace;
+  
+  /* CGA 16-color palette */
+  --cga-black: #000000;
+  --cga-blue: #0000AA;
+  --cga-green: #00AA00;
+  --cga-cyan: #00AAAA;
+  --cga-red: #AA0000;
+  --cga-magenta: #AA00AA;
+  --cga-brown: #AA5500;
+  --cga-light-gray: #AAAAAA;
+  --cga-dark-gray: #555555;
+  --cga-light-blue: #5555FF;
+  --cga-light-green: #55FF55;
+  --cga-light-cyan: #55FFFF;
+  --cga-light-red: #FF5555;
+  --cga-light-magenta: #FF55FF;
+  --cga-yellow: #FFFF55;
+  --cga-white: #FFFFFF;
+}
+
+/* Global BBS-style 80-character width constraint */
+html {
+  width: 80ch; /* Exactly 80 characters wide */
+  padding: 1rem;
+  margin: 0 auto;
+  font-family: "IBM VGA", monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-sizing: border-box;
+}
+
+/* Apply CGA theme to body */
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  margin: 0;
+  padding: 0;
 }
