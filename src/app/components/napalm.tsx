@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync } from "fs";
 import { join } from "path";
+import Link from "next/link";
 import Ansi from "./ansi";
 
 function getRandomNapalmArt(): string {
@@ -17,8 +18,11 @@ function getRandomNapalmArt(): string {
   try {
     const content = readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
-    // Skip the first 4 lines (metadata) and return the rest
-    return lines.slice(4).join('\n');
+    const artLines = lines.slice(4);
+    while (artLines.length > 0 && artLines[artLines.length - 1]?.trim() === '') {
+      artLines.pop();
+    }
+    return artLines.join('\n');
   } catch (error) {
     console.error(`Error reading file ${randomFile}:`, error);
     return "Error loading ASCII art";
@@ -29,8 +33,10 @@ export default function Napalm() {
   const randomArt = getRandomNapalmArt();
 
   return (
-    <Ansi className="select-none">
-      {randomArt}
-    </Ansi>
+    <Link href="/" className="inline-block cursor-pointer">
+      <Ansi className="select-none">
+        {randomArt}
+      </Ansi>
+    </Link>
   );
 }

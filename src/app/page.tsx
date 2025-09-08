@@ -1,9 +1,6 @@
-import Link from "next/link";
-
 import { Separator } from "radix-ui";
 import { CreateGameForm } from "~/app/components/create-game";
 import { GamesList } from "~/app/components/games-list";
-import Napalm from "~/app/components/napalm";
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
 
@@ -12,30 +9,15 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <main>
-        <div>
+      <div className="container mx-auto px-4 py-8">
+        {session?.user && (
           <div>
-            <div>
-              
-                <Napalm />
-              
-              <div>
-                <p>{session && <span>Logged in as {session.user?.name}</span>}</p>
-                <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
-                  {session ? "Sign out" : "Sign in"}
-                </Link>
-              </div>
-            </div>
+            <CreateGameForm />
+            <Separator.Root />
+            <GamesList />
           </div>
-          {session?.user && (
-            <div>
-              <CreateGameForm />
-              <Separator.Root />
-              <GamesList />
-            </div>
-          )}
-        </div>
-      </main>
+        )}
+      </div>
     </HydrateClient>
   );
 }
