@@ -92,7 +92,7 @@ export default function Ansi({ className, children = "" }: Props) {
         const bundleClassName = createClass(bundle);
         
         return (
-          <span key={key} className={bundleClassName || undefined}>
+          <span key={key} className={bundleClassName ?? undefined}>
             {bundle.content}
           </span>
         );
