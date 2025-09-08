@@ -20,12 +20,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col">
+      <body className="flex min-h-screen flex-col">
         <TRPCReactProvider>
           <Header />
-          <main className="flex-1">
-            {children}
-          </main>
+          <main className="flex-1">{children}</main>
           <Footer />
         </TRPCReactProvider>
       </body>

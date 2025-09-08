@@ -8,11 +8,18 @@ import "./src/env.js";
 const config = {
   turbopack: {
     rules: {
-      '*.utf8ans': {
-        loaders: ['raw-loader'],
-        as: '*.js',
+      "*.utf8ans": {
+        loaders: ["raw-loader"],
+        as: "*.js",
       },
     },
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.utf8ans$/,
+      type: "asset/source",
+    });
+    return config;
   },
 };
 

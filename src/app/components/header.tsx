@@ -7,17 +7,15 @@ export default async function Header() {
   return (
     <header className="w-full">
       <div className="flex flex-col items-center">
-        <div className="flex justify-center w-full">
+        <div className="flex w-full justify-center">
           <div>
             <Napalm />
           </div>
         </div>
-        <div className="flex justify-end w-full p-4">
+        <div className="flex w-full justify-end p-4">
           {session ? (
             <div className="flex items-center gap-4">
-              <span className="text-[var(--white)]">
-                {session.user?.name}
-              </span>
+              <span className="text-[var(--white)]">{session.user?.name}</span>
               <form
                 action={async () => {
                   "use server";
@@ -26,7 +24,7 @@ export default async function Header() {
               >
                 <button
                   type="submit"
-                  className="text-sm text-[var(--red)] bg-transparent hover:bg-[var(--red)] hover:text-[var(--white)] focus:outline-none"
+                  className="bg-transparent text-sm text-[var(--red)] hover:bg-[var(--red)] hover:text-[var(--white)] focus:outline-none"
                 >
                   Sign out
                 </button>

@@ -23,12 +23,14 @@ export function CreateGameForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setDateError("");
-    
+
     if (!title || !endingTime) return;
 
     const endingDate = new Date(endingTime);
     if (endingDate <= new Date()) {
-      setDateError("Ending time must be in the future. Please select a valid date and time.");
+      setDateError(
+        "Ending time must be in the future. Please select a valid date and time.",
+      );
       return;
     }
 
@@ -76,11 +78,7 @@ export function CreateGameForm() {
           <Form.Message match="valueMissing">
             Please select an ending time
           </Form.Message>
-          {dateError && (
-            <Form.Message>
-              {dateError}
-            </Form.Message>
-          )}
+          {dateError && <Form.Message>{dateError}</Form.Message>}
         </Form.Field>
 
         <Form.Submit asChild>
@@ -89,7 +87,6 @@ export function CreateGameForm() {
           </button>
         </Form.Submit>
       </Form.Root>
-
     </div>
   );
 }

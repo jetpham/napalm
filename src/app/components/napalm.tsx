@@ -8,9 +8,7 @@ export default function Napalm() {
 
   return (
     <Link href="/" className="inline-block cursor-pointer">
-      <Ansi className="select-none">
-        {randomArt}
-      </Ansi>
+      <Ansi className="select-none">{randomArt}</Ansi>
     </Link>
   );
 }

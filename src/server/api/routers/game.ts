@@ -56,12 +56,9 @@ export const gameRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string().min(1),
-        endingTime: z.date().refine(
-          (date) => date > new Date(),
-          {
-            message: "Ending time must be in the future",
-          }
-        ),
+        endingTime: z.date().refine((date) => date > new Date(), {
+          message: "Ending time must be in the future",
+        }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
