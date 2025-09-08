@@ -1,5 +1,0 @@
-file: ./fonts/font64.tdf
-font: Font 64 Cyan
-char list: ABCDEFGHIJKLMNOPQRSTUVWXYZ
-
-

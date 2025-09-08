@@ -1,5 +1,0 @@
-file: ./fonts/font6.tdf
-font: Font 6
-char list: ABCDEFGHIJKLMNOPQRSTUVWXYZ
-
-
