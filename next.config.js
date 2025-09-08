@@ -5,6 +5,15 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  turbopack: {
+    rules: {
+      '*.utf8ans': {
+        loaders: ['raw-loader'],
+        as: '*.js',
+      },
+    },
+  },
+};
 
 export default config;

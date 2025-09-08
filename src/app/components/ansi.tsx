@@ -59,8 +59,10 @@ function fixBackspace(txt: string): string {
   return txt;
 }
 
+
 function createClass(bundle: AnserJsonEntry): string | null {
   const classes = [];
+  
   if (bundle.bg && bgColorMap[bundle.bg]) {
     classes.push(bgColorMap[bundle.bg]);
   }
@@ -87,16 +89,18 @@ export default function Ansi({ className, children = "" }: Props) {
   });
 
   return (
-    <code className={className}>
-      {bundles.map((bundle, key) => {
-        const bundleClassName = createClass(bundle);
-        
-        return (
-          <span key={key} className={bundleClassName ?? undefined}>
-            {bundle.content}
-          </span>
-        );
-      })}
-    </code>
+    <pre className={className || ''} style={{ textAlign: 'left' }}>
+      <code>
+        {bundles.map((bundle, key) => {
+          const bundleClassName = createClass(bundle);
+          
+          return (
+            <span key={key} className={bundleClassName ?? undefined}>
+              {bundle.content}
+            </span>
+          );
+        })}
+      </code>
+    </pre>
   );
 }
