@@ -14,7 +14,7 @@ export default async function Home() {
       <main>
         <div>
           <div>
-            <h1 className="text-[var(--cga-red)]"><span className="bg-[var(--cga-green)]">Napalm</span></h1>
+            
             <div>
               <p>{session && <span>Logged in as {session.user?.name}</span>}</p>
               <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
@@ -22,8 +22,6 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-          <p>A quick brown fox jumps over the lazy dog.A quick brown fox jumps over the lazy dog.A quick brown fox jumps over the lazy dog.A quick brown fox jumps over the lazy dog.A quick brown fox jumps over the lazy dog.A quick brown fox jumps over the lazy dog.</p>
-
           {session?.user && (
             <div>
               <CreateGameForm />

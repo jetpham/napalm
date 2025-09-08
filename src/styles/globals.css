@@ -37,15 +37,16 @@ html {
   padding: 1rem;
   margin: 0 auto;
   font-family: "IBM VGA", monospace;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  white-space: pre;
+  overflow: hidden;
+  line-height: 1;
   box-sizing: border-box;
 }
 
 /* Apply CGA theme to body */
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: #000000;
+  color: #ffffff;
   margin: 0;
   padding: 0;
 }
