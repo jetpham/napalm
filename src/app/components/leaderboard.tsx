@@ -12,8 +12,8 @@ export function Leaderboard({ gameId }: LeaderboardProps) {
     gameId,
   });
 
-  // Show loading state only if we don't have any data yet
-  if (isLoading && !leaderboard) {
+  // Show loading state only if we're actually loading and have no data
+  if (isLoading && leaderboard === undefined) {
     return (
       <div>
         <h2>Leaderboard</h2>
@@ -22,6 +22,7 @@ export function Leaderboard({ gameId }: LeaderboardProps) {
     );
   }
 
+  // If we have data but it's empty, or if we have no data (but not loading)
   if (!leaderboard || leaderboard.length === 0) {
     return (
       <div>

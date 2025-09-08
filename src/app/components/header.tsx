@@ -15,7 +15,7 @@ export default async function Header() {
         <div className="flex justify-end w-full p-4">
           {session ? (
             <div className="flex items-center gap-4">
-              <span className="text-[var(--light-blue)]">
+              <span className="text-[var(--white)]">
                 {session.user?.name}
               </span>
               <form
@@ -26,7 +26,7 @@ export default async function Header() {
               >
                 <button
                   type="submit"
-                  className="px-3 py-1 text-sm border border-[var(--red)] text-[var(--red)] bg-transparent hover:bg-[var(--red)] hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--red)] transition-colors duration-200 rounded"
+                  className="text-sm text-[var(--red)] bg-transparent hover:bg-[var(--red)] hover:text-[var(--white)] focus:outline-none"
                 >
                   Sign out
                 </button>
