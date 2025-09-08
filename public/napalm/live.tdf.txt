@@ -1,0 +1,5 @@
+file: ./fonts/live.tdf
+font: LiveFont
+char list: !ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+

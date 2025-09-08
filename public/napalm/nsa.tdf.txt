@@ -1,0 +1,5 @@
+file: ./fonts/nsa.tdf
+font: NSA
+char list: ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+

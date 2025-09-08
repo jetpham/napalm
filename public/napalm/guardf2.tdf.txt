@@ -1,0 +1,5 @@
+file: ./fonts/guardf2.tdf
+font: GUARDF2N2
+char list: ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+

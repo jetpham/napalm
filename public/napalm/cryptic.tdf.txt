@@ -1,0 +1,6 @@
+file: ./fonts/cryptic.tdf
+font: Cryptic
+char list: !,-.abcdefghijklmnopqrstuvwxyz
+
+[97;40m∩[0m[0m [97;40mÆ[0m[0m [90;40mP[0m[0m [97;40mÆ[0m[0m [37;40mL[0m[0m [90;40mM[0m[0m [0m
+

@@ -1,0 +1,5 @@
+file: ./fonts/water.tdf
+font: WaterFont
+char list: ABCDEFGHIJKLMNOPQRSTUVWXY
+
+

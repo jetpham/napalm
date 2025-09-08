@@ -1,0 +1,5 @@
+file: ./fonts/madman.tdf
+font: Madman
+char list: !0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+

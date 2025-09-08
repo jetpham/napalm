@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Separator } from "radix-ui";
 import { CreateGameForm } from "~/app/components/create-game";
 import { GamesList } from "~/app/components/games-list";
+import Napalm from "~/app/components/napalm";
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
 
@@ -14,12 +15,16 @@ export default async function Home() {
       <main>
         <div>
           <div>
-            
             <div>
-              <p>{session && <span>Logged in as {session.user?.name}</span>}</p>
-              <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
-                {session ? "Sign out" : "Sign in"}
-              </Link>
+              
+                <Napalm />
+              
+              <div>
+                <p>{session && <span>Logged in as {session.user?.name}</span>}</p>
+                <Link href={session ? "/api/auth/signout" : "/api/auth/signin"}>
+                  {session ? "Sign out" : "Sign in"}
+                </Link>
+              </div>
             </div>
           </div>
           {session?.user && (

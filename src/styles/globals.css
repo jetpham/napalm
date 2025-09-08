@@ -12,23 +12,23 @@
   --font-sans: "IBM VGA", monospace;
   --font-mono: "IBM VGA", monospace;
   
-  /* CGA 16-color palette */
-  --cga-black: #000000;
-  --cga-blue: #0000AA;
-  --cga-green: #00AA00;
-  --cga-cyan: #00AAAA;
-  --cga-red: #AA0000;
-  --cga-magenta: #AA00AA;
-  --cga-brown: #AA5500;
-  --cga-light-gray: #AAAAAA;
-  --cga-dark-gray: #555555;
-  --cga-light-blue: #5555FF;
-  --cga-light-green: #55FF55;
-  --cga-light-cyan: #55FFFF;
-  --cga-light-red: #FF5555;
-  --cga-light-magenta: #FF55FF;
-  --cga-yellow: #FFFF55;
-  --cga-white: #FFFFFF;
+  /* 16-color palette */
+  --black: #000000;
+  --blue: #0000AA;
+  --green: #00AA00;
+  --cyan: #00AAAA;
+  --red: #AA0000;
+  --magenta: #AA00AA;
+  --brown: #AA5500;
+  --light-gray: #AAAAAA;
+  --dark-gray: #555555;
+  --light-blue: #5555FF;
+  --light-green: #55FF55;
+  --light-cyan: #55FFFF;
+  --light-red: #FF5555;
+  --light-magenta: #FF55FF;
+  --yellow: #FFFF55;
+  --white: #FFFFFF;
 }
 
 /* Global BBS-style 80-character width constraint */

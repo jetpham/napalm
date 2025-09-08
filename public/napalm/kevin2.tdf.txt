@@ -1,0 +1,6 @@
+file: ./fonts/kevin2.tdf
+font: Kevin2srrett
+char list: !"#$%'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+
+[37;40mn[0m[0m [37;40ma[0m[0m [37;40mp[0m[0m [37;40ma[0m[0m [37;40ml[0m[0m [37;40mm[0m[0m [0m
+
