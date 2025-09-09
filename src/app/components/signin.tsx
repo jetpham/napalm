@@ -31,9 +31,7 @@ export function SignIn() {
                 // not existing, or the user not having the correct role.
                 // In some cases, you may want to redirect to a custom error
                 if (error instanceof AuthError) {
-                  return redirect(
-                    `${SIGNIN_ERROR_URL}?error=${error.type}`,
-                  );
+                  return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`);
                 }
 
                 // Otherwise if a redirects happens Next.js can handle it

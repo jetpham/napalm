@@ -95,25 +95,25 @@ export const accountRouter = createTRPCRouter({
 
     // Get total games played (excluding games where user is admin)
     const totalGamesPlayed = await ctx.db.gameParticipant.count({
-      where: { 
+      where: {
         userId,
         game: {
-          adminId: { not: userId }
-        }
+          adminId: { not: userId },
+        },
       },
     });
 
     // Get first joined date
     const firstJoined = await ctx.db.gameParticipant.findFirst({
       where: { userId },
-      orderBy: { joinedAt: 'asc' },
+      orderBy: { joinedAt: "asc" },
       select: { joinedAt: true },
     });
 
     return {
       totalGamesHosted,
       totalGamesPlayed,
-      firstJoined: firstJoined?.joinedAt || null,
+      firstJoined: firstJoined?.joinedAt ?? null,
     };
   }),
 });

@@ -84,9 +84,7 @@ export function CreateGameForm() {
 
         <Form.Field name="isPrivate">
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <Form.Label htmlFor="isPrivate">
-              Make this game private
-            </Form.Label>
+            <Form.Label htmlFor="isPrivate">Make this game private</Form.Label>
             <Toggle.Root
               className="Toggle"
               pressed={isPrivate}
@@ -98,10 +96,9 @@ export function CreateGameForm() {
             </Toggle.Root>
           </div>
           <Form.Message>
-            {isPrivate 
-              ? "Only invited users can join this game" 
-              : "Anyone can join this game"
-            }
+            {isPrivate
+              ? "Only invited users can join this game"
+              : "Anyone can join this game"}
           </Form.Message>
         </Form.Field>
 

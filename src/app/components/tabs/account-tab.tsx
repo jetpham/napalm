@@ -4,7 +4,8 @@ import { api } from "~/trpc/react";
 import UsernameSetup from "~/app/components/username-setup";
 
 export function AccountTab() {
-  const { data: stats, isLoading: statsLoading } = api.account.getStats.useQuery();
+  const { data: stats, isLoading: statsLoading } =
+    api.account.getStats.useQuery();
 
   return (
     <div className="space-y-8">
@@ -16,16 +17,20 @@ export function AccountTab() {
           <table className="mx-auto text-center">
             <thead>
               <tr>
-                <th className="text-center px-4">Games Hosted</th>
-                <th className="text-center px-4">Games Played</th>
-                <th className="text-center px-4">First Joined</th>
+                <th className="px-4 text-center">Games Hosted</th>
+                <th className="px-4 text-center">Games Played</th>
+                <th className="px-4 text-center">First Joined</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="text-center px-4">{stats?.totalGamesHosted ?? 0}</td>
-                <td className="text-center px-4">{stats?.totalGamesPlayed ?? 0}</td>
-                <td className="text-center px-4">
+                <td className="px-4 text-center">
+                  {stats?.totalGamesHosted ?? 0}
+                </td>
+                <td className="px-4 text-center">
+                  {stats?.totalGamesPlayed ?? 0}
+                </td>
+                <td className="px-4 text-center">
                   {stats?.firstJoined
                     ? new Date(stats.firstJoined).toLocaleDateString()
                     : "Never"}

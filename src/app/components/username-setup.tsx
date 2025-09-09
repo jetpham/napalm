@@ -8,7 +8,9 @@ interface UsernameSetupProps {
   buttonText?: string;
 }
 
-export default function UsernameSetup({ buttonText = "Continue" }: UsernameSetupProps) {
+export default function UsernameSetup({
+  buttonText = "Continue",
+}: UsernameSetupProps) {
   const [username, setUsername] = useState("");
   const [isChecking, setIsChecking] = useState(false);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);

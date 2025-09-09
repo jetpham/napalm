@@ -44,7 +44,10 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
     <div>
       <header>
         <h1>{game.title}</h1>
-        <p>Created by <span style={{ color: 'var(--yellow)' }}>{game.admin.username}</span></p>
+        <p>
+          Created by{" "}
+          <span style={{ color: "var(--yellow)" }}>{game.admin.username}</span>
+        </p>
         <p>Ends: {new Date(game.endingTime).toLocaleString()}</p>
         {isGameEnded && (
           <p role="status" aria-live="polite">

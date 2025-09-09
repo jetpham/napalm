@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 
 import { Separator } from "radix-ui";
 import { ChallengeList } from "./challenge-list";

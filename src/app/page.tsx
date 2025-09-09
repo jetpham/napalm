@@ -15,35 +15,35 @@ export default async function Home() {
         {session?.user ? (
           session.user.username ? (
             <Tabs.Root defaultValue="games" className="w-full">
-              <Tabs.List className="flex mb-6">
-                <Tabs.Trigger 
-                  value="games" 
+              <Tabs.List className="mb-6 flex">
+                <Tabs.Trigger
+                  value="games"
                   className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
                 >
                   Games
                 </Tabs.Trigger>
-                <Tabs.Trigger 
-                  value="create" 
+                <Tabs.Trigger
+                  value="create"
                   className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
                 >
                   Create Game
                 </Tabs.Trigger>
-                <Tabs.Trigger 
-                  value="account" 
+                <Tabs.Trigger
+                  value="account"
                   className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
                 >
                   Account
                 </Tabs.Trigger>
               </Tabs.List>
-              
+
               <Tabs.Content value="games" className="mt-4">
                 <GamesTab />
               </Tabs.Content>
-              
+
               <Tabs.Content value="create" className="mt-4">
                 <CreateGameTab />
               </Tabs.Content>
-              
+
               <Tabs.Content value="account" className="mt-4">
                 <AccountTab />
               </Tabs.Content>

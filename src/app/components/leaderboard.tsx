@@ -53,7 +53,11 @@ export function Leaderboard({ gameId }: LeaderboardProps) {
                       : `#${index + 1}`}
               </span>
               <div>
-                <div><span style={{ color: 'var(--yellow)' }}>{entry.user.username}</span></div>
+                <div>
+                  <span style={{ color: "var(--yellow)" }}>
+                    {entry.user.username}
+                  </span>
+                </div>
                 <div>
                   {entry.challengesSolved} challenge
                   {entry.challengesSolved !== 1 ? "s" : ""}

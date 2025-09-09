@@ -16,7 +16,7 @@ export default async function Header() {
           <div className="flex w-full justify-end">
             <div className="flex items-center gap-4">
               {session.user?.username && (
-                <span style={{ color: 'var(--yellow)' }}>
+                <span style={{ color: "var(--yellow)" }}>
                   {session.user.username}
                 </span>
               )}
@@ -26,11 +26,8 @@ export default async function Header() {
                   await signOut({ redirectTo: "/" });
                 }}
               >
-                <button
-                  type="submit"
-                  className="focus:outline-none"
-                >
-                  <div className="px-4 py-2 bg-transparent text-[var(--red)] hover:bg-[var(--red)] hover:text-[var(--white)]">
+                <button type="submit" className="focus:outline-none">
+                  <div className="bg-transparent px-4 py-2 text-[var(--red)] hover:bg-[var(--red)] hover:text-[var(--white)]">
                     Sign out
                   </div>
                 </button>

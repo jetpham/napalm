@@ -88,7 +88,7 @@ export const gameRouter = createTRPCRouter({
     });
 
     // Get user invites for all games
-    const gameIds = games.map(game => game.id);
+    const gameIds = games.map((game) => game.id);
     const userInvites = await ctx.db.userInvite.findMany({
       where: {
         gameId: { in: gameIds },
@@ -98,18 +98,19 @@ export const gameRouter = createTRPCRouter({
     });
 
     // Group invites by game ID
-    const invitesByGameId = userInvites.reduce((acc, invite) => {
-      if (!acc[invite.gameId]) {
-        acc[invite.gameId] = [];
-      }
-      acc[invite.gameId]!.push(invite);
-      return acc;
-    }, {} as Record<string, typeof userInvites>);
+    const invitesByGameId = userInvites.reduce(
+      (acc, invite) => {
+        acc[invite.gameId] ??= [];
+        acc[invite.gameId]!.push(invite);
+        return acc;
+      },
+      {} as Record<string, typeof userInvites>,
+    );
 
     // Add userInvites to each game
-    return games.map(game => ({
+    return games.map((game) => ({
       ...game,
-      userInvites: invitesByGameId[game.id] || [],
+      userInvites: invitesByGameId[game.id] ?? [],
     }));
   }),
 
