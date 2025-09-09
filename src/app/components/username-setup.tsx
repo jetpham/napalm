@@ -13,6 +13,7 @@ export default function UsernameSetup() {
 
   const utils = api.useUtils();
   const updateUsernameMutation = api.account.updateUsername.useMutation();
+  const { data: currentUser } = api.account.getMe.useQuery();
 
   // Username availability check
   useEffect(() => {
@@ -23,6 +24,13 @@ export default function UsernameSetup() {
       !/^[a-zA-Z0-9]+$/.test(username)
     ) {
       setIsAvailable(null);
+      return;
+    }
+
+    // If it's the current user's username, mark as available (no need to query)
+    if (currentUser?.username === username) {
+      setIsAvailable(true);
+      setQueryTime(null);
       return;
     }
 
@@ -51,7 +59,7 @@ export default function UsernameSetup() {
     };
 
     void checkUsername();
-  }, [username, utils]);
+  }, [username, utils, currentUser?.username]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +108,15 @@ export default function UsernameSetup() {
           {username.length >= 3 &&
             username.length <= 20 &&
             /^[a-zA-Z0-9]+$/.test(username) &&
+            currentUser?.username === username && (
+              <div className="text-[var(--red)]">
+                This is already your current username
+              </div>
+            )}
+          {username.length >= 3 &&
+            username.length <= 20 &&
+            /^[a-zA-Z0-9]+$/.test(username) &&
+            currentUser?.username !== username &&
             isChecking && (
               <div className="text-[var(--light-blue)]">
                 Checking availability...
@@ -108,6 +125,7 @@ export default function UsernameSetup() {
           {username.length >= 3 &&
             username.length <= 20 &&
             /^[a-zA-Z0-9]+$/.test(username) &&
+            currentUser?.username !== username &&
             !isChecking &&
             isAvailable === false && (
               <div className="text-[var(--red)]">
@@ -117,6 +135,7 @@ export default function UsernameSetup() {
           {username.length >= 3 &&
             username.length <= 20 &&
             /^[a-zA-Z0-9]+$/.test(username) &&
+            currentUser?.username !== username &&
             !isChecking &&
             isAvailable === true && (
               <div className="text-[var(--green)]">
@@ -154,7 +173,8 @@ export default function UsernameSetup() {
             isAvailable !== true ||
             username.length < 3 ||
             username.length > 20 ||
-            !/^[a-zA-Z0-9]+$/.test(username)
+            !/^[a-zA-Z0-9]+$/.test(username) ||
+            currentUser?.username === username
           }
         >
           {updateUsernameMutation.isPending

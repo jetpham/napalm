@@ -1,22 +1,10 @@
-import { Separator } from "radix-ui";
-import { CreateGameForm } from "~/app/components/create-game";
-import { GamesList } from "~/app/components/games-list";
-import UsernameSetup from "~/app/components/username-setup";
-import { auth, signIn } from "~/server/auth";
+import { Tabs } from "radix-ui";
+import { GamesTab } from "~/app/components/tabs/games-tab";
+import { CreateGameTab } from "~/app/components/tabs/create-game-tab";
+import { AccountTab } from "~/app/components/tabs/account-tab";
+import { SignIn } from "~/app/components/signin";
+import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
-import { redirect } from "next/navigation";
-import { AuthError } from "next-auth";
-import Ansi from "~/app/components/ansi";
-import googleAnsi from "~/assets/google.utf8ans";
-import githubAnsi from "~/assets/github.utf8ans";
-
-const SIGNIN_ERROR_URL = "/error";
-
-// Create provider map for dynamic rendering
-const providerMap = [
-  { id: "google", name: "Google", art: googleAnsi },
-  { id: "github", name: "GitHub", art: githubAnsi },
-];
 
 export default async function Home() {
   const session = await auth();
@@ -26,56 +14,47 @@ export default async function Home() {
       <div className="w-full flex-1 px-4 py-8">
         {session?.user ? (
           session.user.username ? (
-            <div className="space-y-6">
-              <CreateGameForm />
-              <Separator.Root />
-              <GamesList />
-            </div>
+            <Tabs.Root defaultValue="games" className="w-full">
+              <Tabs.List className="flex border-b border-gray-200 mb-6">
+                <Tabs.Trigger 
+                  value="games" 
+                  className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                >
+                  Games
+                </Tabs.Trigger>
+                <Tabs.Trigger 
+                  value="create" 
+                  className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                >
+                  Create Game
+                </Tabs.Trigger>
+                <Tabs.Trigger 
+                  value="account" 
+                  className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                >
+                  Account
+                </Tabs.Trigger>
+              </Tabs.List>
+              
+              <Tabs.Content value="games" className="mt-4">
+                <GamesTab />
+              </Tabs.Content>
+              
+              <Tabs.Content value="create" className="mt-4">
+                <CreateGameTab />
+              </Tabs.Content>
+              
+              <Tabs.Content value="account" className="mt-4">
+                <AccountTab />
+              </Tabs.Content>
+            </Tabs.Root>
           ) : (
             <div className="flex min-h-[50vh] justify-center">
-              <UsernameSetup />
+              <AccountTab />
             </div>
           )
         ) : (
-          <div className="flex min-h-[50vh] flex-col items-center justify-center gap-8">
-            <div className="flex gap-8">
-              {providerMap.map((provider) => (
-                <form
-                  key={provider.id}
-                  action={async () => {
-                    "use server";
-                    try {
-                      await signIn(provider.id, {
-                        redirectTo: "/",
-                      });
-                    } catch (error) {
-                      // Signin can fail for a number of reasons, such as the user
-                      // not existing, or the user not having the correct role.
-                      // In some cases, you may want to redirect to a custom error
-                      if (error instanceof AuthError) {
-                        return redirect(
-                          `${SIGNIN_ERROR_URL}?error=${error.type}`,
-                        );
-                      }
-
-                      // Otherwise if a redirects happens Next.js can handle it
-                      // so you can just re-thrown the error and let Next.js handle it.
-                      // Docs:
-                      // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
-                      throw error;
-                    }
-                  }}
-                >
-                  <button
-                    type="submit"
-                    className="cursor-pointer border-none bg-transparent p-0"
-                  >
-                    <Ansi className="select-none">{provider.art}</Ansi>
-                  </button>
-                </form>
-              ))}
-            </div>
-          </div>
+          <SignIn />
         )}
       </div>
     </HydrateClient>

@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { Form } from "radix-ui";
+import { Form, Toggle } from "radix-ui";
 import { api } from "~/trpc/react";
 
 export function CreateGameForm() {
   const [title, setTitle] = useState("");
   const [endingTime, setEndingTime] = useState("");
   const [dateError, setDateError] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
   const router = useRouter();
 
   const utils = api.useUtils();
@@ -37,12 +38,12 @@ export function CreateGameForm() {
     createGame.mutate({
       title,
       endingTime: endingDate,
+      isPublic: !isPrivate,
     });
   };
 
   return (
     <div>
-      <h2>Create New Game</h2>
       <Form.Root onSubmit={handleSubmit}>
         <Form.Field name="title">
           <Form.Label>Game Title</Form.Label>
@@ -79,6 +80,29 @@ export function CreateGameForm() {
             Please select an ending time
           </Form.Message>
           {dateError && <Form.Message>{dateError}</Form.Message>}
+        </Form.Field>
+
+        <Form.Field name="isPrivate">
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <Form.Label htmlFor="isPrivate">
+              Make this game private
+            </Form.Label>
+            <Toggle.Root
+              className="Toggle"
+              pressed={isPrivate}
+              onPressedChange={setIsPrivate}
+              id="isPrivate"
+              aria-label="Toggle private game setting"
+            >
+              {isPrivate ? "🔒" : "🌐"}
+            </Toggle.Root>
+          </div>
+          <Form.Message>
+            {isPrivate 
+              ? "Only invited users can join this game" 
+              : "Anyone can join this game"
+            }
+          </Form.Message>
         </Form.Field>
 
         <Form.Submit asChild>
