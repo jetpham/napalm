@@ -35,7 +35,7 @@
           NIXPKGS_ALLOW_UNFREE = "1";
           
           PRISMA_QUERY_ENGINE_BINARY = "${prismaEngines}/bin/query-engine";
-          PRISMA_MIGRATION_ENGINE_BINARY = "${prismaEngines}/bin/migration-engine";
+          PRISMA_SCHEMA_ENGINE_BINARY = "${prismaEngines}/bin/schema-engine";
           PRISMA_INTROSPECTION_ENGINE_BINARY = "${prismaEngines}/bin/introspection-engine";
           PRISMA_ENGINES_CHECKSUM_IGNORE_MISSING = "1";
         };

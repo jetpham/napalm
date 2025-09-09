@@ -17,18 +17,12 @@ export function GamePage({ gameId, userId }: GamePageProps) {
     <main>
       <div>
         <div>
-          <Link href="/">Back to Home</Link>
-        </div>
-
-        <div>
-          {/* Leaderboard at top */}
           <div>
             <Leaderboard gameId={gameId} />
           </div>
 
           <Separator.Root />
 
-          {/* Main content - challenges */}
           <div>
             <ChallengeList gameId={gameId} userId={userId} />
             <Separator.Root />

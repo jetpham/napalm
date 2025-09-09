@@ -35,7 +35,8 @@ export const gameRouter = createTRPCRouter({
 
   // Get games accessible to the current user (including private games they're invited to)
   getMyGames: usernameRequiredProcedure.query(async ({ ctx }) => {
-    return ctx.db.game.findMany({
+    // First, get all games that the user has access to
+    const games = await ctx.db.game.findMany({
       where: {
         OR: [
           // Public games
@@ -74,12 +75,6 @@ export const gameRouter = createTRPCRouter({
             userId: ctx.session.user.id,
           },
         },
-        userInvites: {
-          where: {
-            invitedUserId: ctx.session.user.id,
-            status: "PENDING",
-          },
-        },
         _count: {
           select: {
             challenges: true,
@@ -91,6 +86,31 @@ export const gameRouter = createTRPCRouter({
         createdAt: "desc",
       },
     });
+
+    // Get user invites for all games
+    const gameIds = games.map(game => game.id);
+    const userInvites = await ctx.db.userInvite.findMany({
+      where: {
+        gameId: { in: gameIds },
+        invitedUserId: ctx.session.user.id,
+        status: "PENDING",
+      },
+    });
+
+    // Group invites by game ID
+    const invitesByGameId = userInvites.reduce((acc, invite) => {
+      if (!acc[invite.gameId]) {
+        acc[invite.gameId] = [];
+      }
+      acc[invite.gameId]!.push(invite);
+      return acc;
+    }, {} as Record<string, typeof userInvites>);
+
+    // Add userInvites to each game
+    return games.map(game => ({
+      ...game,
+      userInvites: invitesByGameId[game.id] || [],
+    }));
   }),
 
   getById: usernameRequiredProcedure
@@ -115,12 +135,6 @@ export const gameRouter = createTRPCRouter({
               userId: ctx.session.user.id,
             },
           },
-          userInvites: {
-            where: {
-              invitedUserId: ctx.session.user.id,
-              status: "PENDING",
-            },
-          },
         },
       });
 
@@ -128,19 +142,30 @@ export const gameRouter = createTRPCRouter({
         throw new Error("Game not found");
       }
 
-      // Check access permissions
+      // Check for user invites separately
+      const userInvites = await ctx.db.userInvite.findMany({
+        where: {
+          gameId: input.id,
+          invitedUserId: ctx.session.user.id,
+          status: "PENDING",
+        },
+      });
 
+      // Check access permissions
       const hasAccess =
         game.isPublic || // Public game
         game.adminId === ctx.session.user.id || // User is admin
         game.participants.length > 0 || // User is participant
-        game.userInvites.length > 0; // User has pending user invite
+        userInvites.length > 0; // User has pending user invite
 
       if (!hasAccess) {
         throw new Error("You don't have access to this game");
       }
 
-      return game;
+      return {
+        ...game,
+        userInvites,
+      };
     }),
 
   create: usernameRequiredProcedure
