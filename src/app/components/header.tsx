@@ -16,7 +16,7 @@ export default async function Header() {
           <div className="flex w-full justify-end">
             <div className="flex items-center gap-4">
               {session.user?.username && (
-                <span className="text-[var(--white)]">
+                <span style={{ color: 'var(--yellow)' }}>
                   {session.user.username}
                 </span>
               )}

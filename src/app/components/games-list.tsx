@@ -7,13 +7,13 @@ import { api } from "~/trpc/react";
 
 export function GamesList() {
   const router = useRouter();
-  const { data: games, isLoading } = api.game.getAll.useQuery();
+  const { data: games, isLoading } = api.game.getMyGames.useQuery();
 
   if (isLoading) {
     return (
       <div>
-        <h2>All Games</h2>
-        <div>Loading games...</div>
+      <h2 className="text-center">Your Games</h2>
+      <div>Loading games...</div>
       </div>
     );
   }
@@ -21,39 +21,49 @@ export function GamesList() {
   if (!games || games.length === 0) {
     return (
       <div>
-        <h2>All Games</h2>
-        <div>No games found.</div>
+      <h2 className="text-center">Your Games</h2>
+      <div>No games found.</div>
       </div>
     );
   }
 
   return (
     <section>
-      <h2>All Games</h2>
+      <h2 className="text-center">Your Games</h2>
       <ul role="list" aria-label="List of all games">
         {games.map((game, index) => {
           const isEnded = new Date() > game.endingTime;
           const isActive = !isEnded;
 
           return (
-            <li key={game.id} role="listitem">
+            <li key={game.id} role="listitem" className="py-2">
               <button
                 onClick={() => router.push(`/game/${game.id}`)}
                 type="button"
-                className="w-full text-left"
-                aria-label={`View game: ${game.title}, ${isActive ? "Active" : "Ended"}, Admin: ${game.admin.username}, ${game._count.challenges} challenges, Ends: ${new Date(game.endingTime).toLocaleString()}`}
+                className="w-full text-left group"
+                aria-label={`View game: ${game.title}, ${isActive ? "Active" : "Ended"}, ${game.isPublic ? "Public" : "Private"}, Admin: ${game.admin.username}, ${game._count.challenges} challenges, Ends: ${new Date(game.endingTime).toLocaleString()}`}
               >
                 <div>
-                  <h3>{game.title}</h3>
-                  <span
-                    aria-label={`Game status: ${isActive ? "Active" : "Ended"}`}
-                  >
-                    {isActive ? "Active" : "Ended"}
-                  </span>
+                  <h3 className="inline group-hover:bg-[var(--white)] group-hover:text-[var(--dark-gray)]">
+                    {game.title}
+                    <span className="opacity-0 group-hover:opacity-100">&nbsp;&lt;--</span>
+                  </h3>
                 </div>
-                <p>Admin: {game.admin.username}</p>
-                <p>Challenges: {game._count.challenges}</p>
-                <p>Ends: {new Date(game.endingTime).toLocaleString()}</p>
+                <div className="ml-8">
+                  <p>Status: <span className={`${
+                    isActive 
+                      ? 'bg-[var(--green)] text-[var(--dark-gray)]' 
+                      : 'bg-[var(--yellow)] text-[var(--dark-gray)]'
+                  }`}>{isActive ? "Active" : "Ended"}</span></p>
+                  <p>Visibility: <span className={`${
+                    game.isPublic 
+                      ? 'bg-[var(--light-blue)] text-[var(--light-gray)]' 
+                      : 'bg-[var(--dark-gray)] text-[var(--light-gray)]'
+                  }`}>{game.isPublic ? "Public" : "Private"}</span></p>
+                  <p>Admin: <span style={{ color: 'var(--yellow)' }}>{game.admin.username}</span></p>
+                  <p>Challenges: {game._count.challenges}</p>
+                  <p>Ends: {new Date(game.endingTime).toLocaleString()}</p>
+                </div>
               </button>
               {index < games.length - 1 && <Separator.Root />}
             </li>
