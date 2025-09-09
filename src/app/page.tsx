@@ -5,6 +5,7 @@ import { AccountTab } from "~/app/components/tabs/account-tab";
 import { SignIn } from "~/app/components/signin";
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
+import UsernameSetup from "./components/username-setup";
 
 export default async function Home() {
   const session = await auth();
@@ -50,7 +51,7 @@ export default async function Home() {
             </Tabs.Root>
           ) : (
             <div className="flex min-h-[50vh] justify-center">
-              <AccountTab />
+              <UsernameSetup buttonText="Continue to Napalm" />
             </div>
           )
         ) : (
