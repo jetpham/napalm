@@ -46,8 +46,8 @@ html {
 /* Apply CGA theme to body */
 body {
   height: 100%;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--black);
+  color: var(--white);
   margin: 0;
   padding: 0;
 }

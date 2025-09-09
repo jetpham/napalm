@@ -6,7 +6,7 @@ export default async function Header() {
 
   return (
     <header className="w-full p-4">
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-2">
         <div className="flex w-full justify-center">
           <div className="max-w-full overflow-hidden">
             <Napalm />
@@ -28,9 +28,11 @@ export default async function Header() {
               >
                 <button
                   type="submit"
-                  className="bg-transparent text-[var(--red)] hover:bg-[var(--red)] hover:text-[var(--white)] focus:outline-none"
+                  className="focus:outline-none"
                 >
-                  Sign out
+                  <div className="px-4 py-2 bg-transparent text-[var(--red)] hover:bg-[var(--red)] hover:text-[var(--white)]">
+                    Sign out
+                  </div>
                 </button>
               </form>
             </div>

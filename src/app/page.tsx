@@ -15,22 +15,22 @@ export default async function Home() {
         {session?.user ? (
           session.user.username ? (
             <Tabs.Root defaultValue="games" className="w-full">
-              <Tabs.List className="flex border-b border-gray-200 mb-6">
+              <Tabs.List className="flex mb-6">
                 <Tabs.Trigger 
                   value="games" 
-                  className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                  className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
                 >
                   Games
                 </Tabs.Trigger>
                 <Tabs.Trigger 
                   value="create" 
-                  className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                  className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
                 >
                   Create Game
                 </Tabs.Trigger>
                 <Tabs.Trigger 
                   value="account" 
-                  className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                  className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
                 >
                   Account
                 </Tabs.Trigger>

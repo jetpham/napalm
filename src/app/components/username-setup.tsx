@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import { Form } from "radix-ui";
 import { api } from "~/trpc/react";
 
-export default function UsernameSetup() {
+interface UsernameSetupProps {
+  buttonText?: string;
+}
+
+export default function UsernameSetup({ buttonText = "Continue" }: UsernameSetupProps) {
   const [username, setUsername] = useState("");
   const [isChecking, setIsChecking] = useState(false);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
@@ -166,7 +170,7 @@ export default function UsernameSetup() {
       <Form.Submit asChild>
         <button
           type="submit"
-          className="disabled:cursor-not-allowed disabled:text-[var(--dark-gray)]"
+          className="disabled:cursor-not-allowed"
           disabled={
             updateUsernameMutation.isPending ||
             isChecking ||
@@ -177,9 +181,11 @@ export default function UsernameSetup() {
             currentUser?.username === username
           }
         >
-          {updateUsernameMutation.isPending
-            ? "Setting Username..."
-            : "Continue"}
+          <div className="px-4 py-2 text-[var(--white)] hover:bg-[var(--light-gray)] hover:text-[var(--black)] disabled:bg-transparent disabled:text-[var(--dark-gray)]">
+            {updateUsernameMutation.isPending
+              ? "Setting Username..."
+              : buttonText}
+          </div>
         </button>
       </Form.Submit>
     </Form.Root>

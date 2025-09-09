@@ -83,4 +83,37 @@ export const accountRouter = createTRPCRouter({
         },
       });
     }),
+
+  // Get account statistics for current user
+  getStats: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+
+    // Get total games hosted
+    const totalGamesHosted = await ctx.db.game.count({
+      where: { adminId: userId },
+    });
+
+    // Get total games played (excluding games where user is admin)
+    const totalGamesPlayed = await ctx.db.gameParticipant.count({
+      where: { 
+        userId,
+        game: {
+          adminId: { not: userId }
+        }
+      },
+    });
+
+    // Get first joined date
+    const firstJoined = await ctx.db.gameParticipant.findFirst({
+      where: { userId },
+      orderBy: { joinedAt: 'asc' },
+      select: { joinedAt: true },
+    });
+
+    return {
+      totalGamesHosted,
+      totalGamesPlayed,
+      firstJoined: firstJoined?.joinedAt || null,
+    };
+  }),
 });
