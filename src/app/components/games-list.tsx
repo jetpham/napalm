@@ -11,7 +11,6 @@ export function GamesList() {
   if (isLoading) {
     return (
       <div>
-        <h2 className="text-center">Your Games</h2>
         <div>Loading games...</div>
       </div>
     );
@@ -20,7 +19,6 @@ export function GamesList() {
   if (!games || games.length === 0) {
     return (
       <div>
-        <h2 className="text-center">Your Games</h2>
         <div>No games found.</div>
       </div>
     );
@@ -28,14 +26,13 @@ export function GamesList() {
 
   return (
     <section>
-      <h2 className="text-center">Your Games</h2>
       <ul role="list" aria-label="List of all games">
         {games.map((game, index) => {
           const isEnded = new Date() > game.endingTime;
           const isActive = !isEnded;
 
           return (
-            <li key={game.id} role="listitem" className="py-2">
+            <li key={game.id} role="listitem" className="pb-2">
               <Link
                 href={`/game/${game.id}`}
                 prefetch={true}
@@ -46,7 +43,7 @@ export function GamesList() {
                   <h3 className="inline group-hover:bg-[var(--white)] group-hover:text-[var(--dark-gray)]">
                     {game.title}
                     <span className="opacity-0 group-hover:opacity-100">
-                      &nbsp;&lt;--
+                      {" <-"}
                     </span>
                   </h3>
                 </div>

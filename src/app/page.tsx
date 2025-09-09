@@ -12,11 +12,11 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <div className="w-full flex-1 px-4 py-8">
+      <div className="w-full flex-1">
         {session?.user ? (
           session.user.username ? (
             <Tabs.Root defaultValue="games" className="w-full">
-              <Tabs.List className="mb-6 flex">
+              <Tabs.List className="mb-6 flex -mt-2">
                 <Tabs.Trigger
                   value="games"
                   className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
