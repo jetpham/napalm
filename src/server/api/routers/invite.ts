@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { randomBytes } from "crypto";
+import { InviteStatus } from "@prisma/client";
 
 import {
   createTRPCRouter,
@@ -48,7 +49,7 @@ export const inviteRouter = createTRPCRouter({
         where: {
           invitedUserId: targetUser.id,
           gameId: input.gameId,
-          status: "PENDING",
+          status: InviteStatus.PENDING,
         },
       });
 
@@ -75,14 +76,12 @@ export const inviteRouter = createTRPCRouter({
           invitedBy: {
             select: {
               id: true,
-              name: true,
               username: true,
             },
           },
           invitedUser: {
             select: {
               id: true,
-              name: true,
               username: true,
             },
           },
@@ -140,8 +139,7 @@ export const inviteRouter = createTRPCRouter({
           invitedBy: {
             select: {
               id: true,
-              name: true,
-              email: true,
+              username: true,
             },
           },
         },
@@ -179,21 +177,18 @@ export const inviteRouter = createTRPCRouter({
             invitedBy: {
               select: {
                 id: true,
-                name: true,
                 username: true,
               },
             },
             acceptedBy: {
               select: {
                 id: true,
-                name: true,
                 username: true,
               },
             },
             invitedUser: {
               select: {
                 id: true,
-                name: true,
                 username: true,
               },
             },
@@ -206,15 +201,11 @@ export const inviteRouter = createTRPCRouter({
             invitedBy: {
               select: {
                 id: true,
-                name: true,
-                email: true,
               },
             },
             usedBy: {
               select: {
                 id: true,
-                name: true,
-                email: true,
               },
             },
           },
@@ -233,7 +224,7 @@ export const inviteRouter = createTRPCRouter({
     return ctx.db.userInvite.findMany({
       where: {
         invitedUserId: ctx.session.user.id,
-        status: "PENDING",
+        status: InviteStatus.PENDING,
       },
       include: {
         game: {
@@ -247,7 +238,6 @@ export const inviteRouter = createTRPCRouter({
         invitedBy: {
           select: {
             id: true,
-            name: true,
             username: true,
           },
         },
@@ -274,8 +264,7 @@ export const inviteRouter = createTRPCRouter({
           invitedBy: {
             select: {
               id: true,
-              name: true,
-              email: true,
+              username: true,
             },
           },
         },
@@ -285,11 +274,11 @@ export const inviteRouter = createTRPCRouter({
         throw new Error("Invalid invite link");
       }
 
-      if (invite.status !== "PENDING") {
-        if (invite.status === "USED") {
+      if (invite.status !== InviteStatus.PENDING) {
+        if (invite.status === InviteStatus.USED) {
           throw new Error("Invite link has already been used");
         }
-        if (invite.status === "DELETED") {
+        if (invite.status === InviteStatus.DELETED) {
           throw new Error("Invite link has been deleted");
         }
         throw new Error("Invite link is no longer valid");
@@ -331,7 +320,7 @@ export const inviteRouter = createTRPCRouter({
         throw new Error("This invite is not for you");
       }
 
-      if (invite.status !== "PENDING") {
+      if (invite.status !== InviteStatus.PENDING) {
         throw new Error("Invite is no longer valid");
       }
 
@@ -364,7 +353,7 @@ export const inviteRouter = createTRPCRouter({
         const updatedInvite = await tx.userInvite.update({
           where: { id: input.inviteId },
           data: {
-            status: "ACCEPTED",
+            status: InviteStatus.ACCEPTED,
             acceptedById: ctx.session.user.id,
             acceptedAt: new Date(),
           },
@@ -404,11 +393,11 @@ export const inviteRouter = createTRPCRouter({
         throw new Error("Invalid invite link");
       }
 
-      if (invite.status !== "PENDING") {
-        if (invite.status === "USED") {
+      if (invite.status !== InviteStatus.PENDING) {
+        if (invite.status === InviteStatus.USED) {
           throw new Error("Invite link has already been used");
         }
-        if (invite.status === "DELETED") {
+        if (invite.status === InviteStatus.DELETED) {
           throw new Error("Invite link has been deleted");
         }
         throw new Error("Invite link is no longer valid");
@@ -444,7 +433,7 @@ export const inviteRouter = createTRPCRouter({
           usedById: string;
           usedAt: Date;
           isUsed?: boolean;
-          status?: string;
+          status?: InviteStatus;
         } = {
           usedById: ctx.session.user.id,
           usedAt: new Date(),
@@ -453,7 +442,7 @@ export const inviteRouter = createTRPCRouter({
         // If it's a single-use link (isUsed is false), mark it as used
         if (invite.isUsed === false) {
           updateData.isUsed = true;
-          updateData.status = "USED";
+          updateData.status = InviteStatus.USED;
         }
 
         const updatedInvite = await tx.inviteLink.update({
@@ -489,7 +478,7 @@ export const inviteRouter = createTRPCRouter({
         throw new Error("This invite is not for you");
       }
 
-      if (invite.status !== "PENDING") {
+      if (invite.status !== InviteStatus.PENDING) {
         throw new Error("Invite is no longer valid");
       }
 
@@ -520,13 +509,13 @@ export const inviteRouter = createTRPCRouter({
         throw new Error("Only game admin can cancel invites");
       }
 
-      if (invite.status !== "PENDING") {
+      if (invite.status !== InviteStatus.PENDING) {
         throw new Error("Cannot cancel non-pending invites");
       }
 
       return ctx.db.userInvite.update({
         where: { id: input.inviteId },
-        data: { status: "DELETED" },
+        data: { status: InviteStatus.DELETED },
       });
     }),
 
@@ -551,13 +540,13 @@ export const inviteRouter = createTRPCRouter({
         throw new Error("Only game admin can cancel invite links");
       }
 
-      if (invite.status !== "PENDING") {
+      if (invite.status !== InviteStatus.PENDING) {
         throw new Error("Cannot cancel non-pending invite links");
       }
 
       return ctx.db.inviteLink.update({
         where: { id: input.inviteId },
-        data: { status: "DELETED" },
+        data: { status: InviteStatus.DELETED },
       });
     }),
 
@@ -610,7 +599,7 @@ export const inviteRouter = createTRPCRouter({
             where: {
               invitedUserId: targetUser.id,
               gameId: input.gameId,
-              status: "PENDING",
+              status: InviteStatus.PENDING,
             },
           });
 

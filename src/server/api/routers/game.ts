@@ -16,7 +16,6 @@ export const gameRouter = createTRPCRouter({
         admin: {
           select: {
             id: true,
-            name: true,
             username: true,
           },
         },
@@ -66,7 +65,6 @@ export const gameRouter = createTRPCRouter({
         admin: {
           select: {
             id: true,
-            name: true,
             username: true,
           },
         },
@@ -104,7 +102,6 @@ export const gameRouter = createTRPCRouter({
           admin: {
             select: {
               id: true,
-              name: true,
               username: true,
             },
           },
@@ -170,8 +167,7 @@ export const gameRouter = createTRPCRouter({
             admin: {
               select: {
                 id: true,
-                name: true,
-                email: true,
+                username: true,
               },
             },
           },
@@ -203,7 +199,6 @@ export const gameRouter = createTRPCRouter({
           user: {
             select: {
               id: true,
-              name: true,
               username: true,
             },
           },
@@ -220,7 +215,7 @@ export const gameRouter = createTRPCRouter({
       const userScores = new Map<
         string,
         {
-          user: { id: string; name: string | null; username: string | null };
+          user: { id: string; username: string | null };
           score: number;
           challengesSolved: number;
         }
@@ -391,7 +386,6 @@ export const gameRouter = createTRPCRouter({
           user: {
             select: {
               id: true,
-              name: true,
               username: true,
             },
           },
@@ -441,7 +435,6 @@ export const gameRouter = createTRPCRouter({
           admin: {
             select: {
               id: true,
-              name: true,
               username: true,
             },
           },

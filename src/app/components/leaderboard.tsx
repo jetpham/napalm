@@ -40,7 +40,7 @@ export function Leaderboard({ gameId }: LeaderboardProps) {
           <li
             key={entry.user.id}
             role="listitem"
-            aria-label={`Rank ${index + 1}: ${entry.user.name ?? entry.user.email} with ${entry.score} points`}
+            aria-label={`Rank ${index + 1}: ${entry.user.username} with ${entry.score} points`}
           >
             <div>
               <span aria-hidden="true">
@@ -53,7 +53,7 @@ export function Leaderboard({ gameId }: LeaderboardProps) {
                       : `#${index + 1}`}
               </span>
               <div>
-                <div>{entry.user.name ?? entry.user.email}</div>
+                <div>{entry.user.username}</div>
                 <div>
                   {entry.challengesSolved} challenge
                   {entry.challengesSolved !== 1 ? "s" : ""}

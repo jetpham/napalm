@@ -38,7 +38,6 @@ export const accountRouter = createTRPCRouter({
       where: { id: ctx.session.user.id },
       select: {
         id: true,
-        name: true,
         email: true,
         username: true,
         image: true,
@@ -79,8 +78,6 @@ export const accountRouter = createTRPCRouter({
         data: { username: input.username },
         select: {
           id: true,
-          name: true,
-          email: true,
           username: true,
           image: true,
         },

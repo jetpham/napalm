@@ -44,7 +44,7 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
     <div>
       <header>
         <h1>{game.title}</h1>
-        <p>Created by {game.admin.name ?? game.admin.email}</p>
+        <p>Created by {game.admin.username}</p>
         <p>Ends: {new Date(game.endingTime).toLocaleString()}</p>
         {isGameEnded && (
           <p role="status" aria-live="polite">
