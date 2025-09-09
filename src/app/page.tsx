@@ -1,6 +1,7 @@
 import { Separator } from "radix-ui";
 import { CreateGameForm } from "~/app/components/create-game";
 import { GamesList } from "~/app/components/games-list";
+import UsernameSetup from "~/app/components/username-setup";
 import { auth, signIn } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
 import { redirect } from "next/navigation";
@@ -22,15 +23,21 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <div className="container mx-auto px-4 py-8">
+      <div className="w-full flex-1 px-4 py-8">
         {session?.user ? (
-          <div>
-            <CreateGameForm />
-            <Separator.Root />
-            <GamesList />
-          </div>
+          session.user.username ? (
+            <div className="space-y-6">
+              <CreateGameForm />
+              <Separator.Root />
+              <GamesList />
+            </div>
+          ) : (
+            <div className="flex min-h-[50vh] justify-center">
+              <UsernameSetup />
+            </div>
+          )
         ) : (
-          <div className="flex min-h-[60vh] flex-col items-center justify-center gap-8">
+          <div className="flex min-h-[50vh] flex-col items-center justify-center gap-8">
             <div className="flex gap-8">
               {providerMap.map((provider) => (
                 <form

@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { GamePage } from "~/app/components/game-page";
 import { auth } from "~/server/auth";
@@ -14,6 +14,11 @@ export default async function GamePageRoute({ params }: GamePageProps) {
 
   if (!session?.user) {
     notFound();
+  }
+
+  // Ensure user has completed username setup
+  if (!session.user.username) {
+    return redirect("/");
   }
 
   const game = await api.game.getById({ id });

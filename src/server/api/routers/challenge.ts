@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, usernameRequiredProcedure } from "~/server/api/trpc";
 
 export const challengeRouter = createTRPCRouter({
-  create: protectedProcedure
+  create: usernameRequiredProcedure
     .input(
       z.object({
         gameId: z.string(),
@@ -44,7 +44,7 @@ export const challengeRouter = createTRPCRouter({
       });
     }),
 
-  getByGame: protectedProcedure
+  getByGame: usernameRequiredProcedure
     .input(z.object({ gameId: z.string() }))
     .query(async ({ ctx, input }) => {
       const challenges = await ctx.db.challenge.findMany({
@@ -67,7 +67,7 @@ export const challengeRouter = createTRPCRouter({
       }));
     }),
 
-  getFlag: protectedProcedure
+  getFlag: usernameRequiredProcedure
     .input(z.object({ challengeId: z.string() }))
     .query(async ({ ctx, input }) => {
       const challenge = await ctx.db.challenge.findUnique({

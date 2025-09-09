@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="py-8 text-center">
+    <footer className="m-4 w-full space-y-2 p-4 text-center">
       <div>
         A CTF Platform Made by{" "}
         <Link

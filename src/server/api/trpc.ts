@@ -131,3 +131,29 @@ export const protectedProcedure = t.procedure
       },
     });
   });
+
+/**
+ * Protected procedure that requires username
+ *
+ * Use this for operations that require a user to have completed username setup.
+ * This ensures users can't access game features without setting up their username.
+ */
+export const usernameRequiredProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(({ ctx, next }) => {
+    if (!ctx.session?.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    if (!ctx.session.user.username) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Username required. Please complete your profile setup.",
+      });
+    }
+    return next({
+      ctx: {
+        // infers the `session` as non-nullable with username
+        session: { ...ctx.session, user: ctx.session.user },
+      },
+    });
+  });

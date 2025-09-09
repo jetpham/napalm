@@ -33,18 +33,19 @@
 
 /* Global BBS-style 80-character width constraint */
 html {
+  height: 100%;
   width: 80ch; /* Exactly 80 characters wide */
   padding: 1rem;
   margin: 0 auto;
   font-family: "IBM VGA", monospace;
   white-space: pre;
-  overflow: hidden;
   line-height: 1;
   box-sizing: border-box;
 }
 
 /* Apply CGA theme to body */
 body {
+  height: 100%;
   background-color: #000000;
   color: #ffffff;
   margin: 0;

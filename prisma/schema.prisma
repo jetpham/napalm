@@ -19,10 +19,19 @@ model Game {
     title       String
     createdAt   DateTime @default(now())
     endingTime  DateTime
-
+    
+    // Privacy control - simple public/private
+    isPublic    Boolean  @default(true)
+    
     admin     User        @relation(fields: [adminId], references: [id])
     adminId   String
     challenges Challenge[]
+    
+    // Game participants and invites
+    participants GameParticipant[]
+    userInvites  UserInvite[]
+    inviteLinks  InviteLink[]
+    
 
     @@index([title])
 }
@@ -85,12 +94,22 @@ model User {
     id            String    @id @default(cuid())
     name          String?
     email         String?   @unique
+    username      String?   @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
     games         Game[]
     submissions   Submission[]
+    
+    // Game participation and invites
+    gameParticipants GameParticipant[]
+    acceptedUserInvites UserInvite[] @relation("AcceptedUserInvites")
+    invitedByUserInvites UserInvite[] @relation("InvitedBy")
+    invitedUserInvites UserInvite[] @relation("InvitedUser")
+    inviteLinks      InviteLink[]
+    usedInviteLinks  InviteLink[] @relation("UsedInviteLinks")
+    
 }
 
 model VerificationToken {
@@ -100,3 +119,77 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+// Game participation tracking
+model GameParticipant {
+    id        String   @id @default(cuid())
+    joinedAt  DateTime @default(now())
+    
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+    gameId String
+    
+    @@unique([userId, gameId])
+    @@index([gameId])
+}
+
+// User invitations (by user reference)
+model UserInvite {
+    id        String   @id @default(cuid())
+    message   String?
+    status    InviteStatus @default(PENDING)
+    createdAt DateTime @default(now())
+    expiresAt DateTime? // Optional expiration
+    
+    invitedBy User @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
+    invitedById String
+    invitedUser User @relation("InvitedUser", fields: [invitedUserId], references: [id], onDelete: Cascade)
+    invitedUserId String
+    game      Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+    gameId    String
+    
+    // If user accepts invite, link to their user account
+    acceptedBy   User?   @relation("AcceptedUserInvites", fields: [acceptedById], references: [id])
+    acceptedById String?
+    acceptedAt   DateTime?
+    
+    @@unique([invitedUserId, gameId]) // Prevent duplicate invites to same user for same game
+    @@index([gameId])
+    @@index([status])
+}
+
+// Invite links
+model InviteLink {
+    id        String   @id @default(cuid())
+    inviteCode String  @unique // unique code for invite links
+    message   String?
+    status    InviteStatus @default(PENDING)
+    createdAt DateTime @default(now())
+    expiresAt DateTime? // Optional expiration
+    isUsed    Boolean? // Optional usage tracking - null means no limit, false means unused, true means used
+    
+    invitedBy User @relation(fields: [invitedById], references: [id], onDelete: Cascade)
+    invitedById String
+    game      Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+    gameId    String
+    
+    // Track who used the invite link (for single-use links)
+    usedBy   User?   @relation("UsedInviteLinks", fields: [usedById], references: [id])
+    usedById String?
+    usedAt   DateTime?
+    
+    @@index([gameId])
+    @@index([status])
+    @@index([inviteCode])
+}
+
+enum InviteStatus {
+    PENDING
+    ACCEPTED
+    DECLINED
+    EXPIRED
+    DELETED
+    USED
+}
+

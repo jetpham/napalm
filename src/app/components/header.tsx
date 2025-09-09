@@ -5,17 +5,21 @@ export default async function Header() {
   const session = await auth();
 
   return (
-    <header className="w-full">
-      <div className="flex flex-col items-center">
+    <header className="w-full p-4">
+      <div className="flex flex-col items-center gap-4">
         <div className="flex w-full justify-center">
-          <div>
+          <div className="max-w-full overflow-hidden">
             <Napalm />
           </div>
         </div>
-        <div className="flex w-full justify-end p-4">
-          {session ? (
+        {session && (
+          <div className="flex w-full justify-end">
             <div className="flex items-center gap-4">
-              <span className="text-[var(--white)]">{session.user?.name}</span>
+              {session.user?.username && (
+                <span className="text-[var(--white)]">
+                  {session.user.username}
+                </span>
+              )}
               <form
                 action={async () => {
                   "use server";
@@ -24,14 +28,14 @@ export default async function Header() {
               >
                 <button
                   type="submit"
-                  className="bg-transparent text-sm text-[var(--red)] hover:bg-[var(--red)] hover:text-[var(--white)] focus:outline-none"
+                  className="bg-transparent text-[var(--red)] hover:bg-[var(--red)] hover:text-[var(--white)] focus:outline-none"
                 >
                   Sign out
                 </button>
               </form>
             </div>
-          ) : null}
-        </div>
+          </div>
+        )}
       </div>
     </header>
   );
