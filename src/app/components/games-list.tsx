@@ -25,8 +25,7 @@ export function GamesList() {
   }
 
   return (
-    <section>
-      <ul role="list" aria-label="List of all games">
+      <ul role="list" aria-label="List of your games">
         {games.map((game, index) => {
           const isEnded = new Date() > game.endingTime;
           const isActive = !isEnded;
@@ -87,6 +86,5 @@ export function GamesList() {
           );
         })}
       </ul>
-    </section>
   );
 }

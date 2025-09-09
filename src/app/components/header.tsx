@@ -1,5 +1,6 @@
 import { auth, signOut } from "~/server/auth";
 import Napalm from "./napalm";
+import Link from "next/link";
 
 export default async function Header() {
   const session = await auth();
@@ -8,9 +9,14 @@ export default async function Header() {
     <header className="w-full p-4">
       <div className="flex flex-col items-center gap-2">
         <div className="flex w-full justify-center">
-          <div className="max-w-full overflow-hidden">
+          <Link 
+      href="/" 
+      className="inline-block cursor-pointer max-w-full overflow-hidden"
+    >
+
             <Napalm />
-          </div>
+    </Link>
+
         </div>
         {session && (
           <div className="flex w-full justify-end">
@@ -26,7 +32,7 @@ export default async function Header() {
                   await signOut({ redirectTo: "/" });
                 }}
               >
-                <button type="submit" className="focus:outline-none">
+                <button type="submit">
                   <div className="bg-transparent px-4 py-2 text-[var(--red)] hover:bg-[var(--red)] hover:text-[var(--white)]">
                     Sign out
                   </div>

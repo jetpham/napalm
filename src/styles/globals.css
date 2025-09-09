@@ -51,3 +51,16 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Global focus ring styles for all tabbable elements */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus,
+[contenteditable]:focus {
+  outline: 2px solid white;
+  outline-offset: -2px;
+  border-radius: 0;
+}
