@@ -1,8 +1,5 @@
-"use client";
-
 import { Separator } from "radix-ui";
-import { api } from "~/trpc/react";
-
+import { api } from "~/trpc/server";
 import { ChallengeItem } from "./challenge-item";
 
 interface ChallengeListProps {
@@ -10,23 +7,13 @@ interface ChallengeListProps {
   userId: string;
 }
 
-export function ChallengeList({ gameId, userId }: ChallengeListProps) {
-  const { data: game, isLoading: gameLoading } = api.game.getById.useQuery({
-    id: gameId,
-  });
-  const { data: challenges, isLoading: challengesLoading } =
-    api.challenge.getByGame.useQuery({
-      gameId,
-    });
-  const { data: isGameEnded } = api.game.isGameEnded.useQuery({ gameId });
-
-  if (gameLoading || challengesLoading) {
-    return (
-      <div>
-        <div>Loading...</div>
-      </div>
-    );
-  }
+export async function ChallengeList({ gameId, userId }: ChallengeListProps) {
+  // Fetch data server-side
+  const [game, challenges, isGameEnded] = await Promise.all([
+    api.game.getById({ id: gameId }),
+    api.challenge.getByGame({ gameId }),
+    api.game.isGameEnded({ gameId }),
+  ]);
 
   if (!game) {
     return (

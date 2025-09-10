@@ -23,8 +23,8 @@ export function ChallengeItem({
   isGameEnded,
 }: ChallengeItemProps) {
   const [flag, setFlag] = useState("");
-  const [showFlag, setShowFlag] = useState(false);
   const [message, setMessage] = useState("");
+  const [justSolved, setJustSolved] = useState(false);
 
   const utils = api.useUtils();
   const submitFlag = api.submission.submit.useMutation({
@@ -32,8 +32,10 @@ export function ChallengeItem({
       // If we get here, the submission was correct
       setMessage("Correct!");
       setFlag("");
+      setJustSolved(true); // Mark that this challenge was just solved
       void utils.challenge.getByGame.invalidate();
       void utils.game.getLeaderboard.invalidate();
+      void getFlag.refetch(); // Refetch the flag data so it's available immediately
     },
     onError: (error) => {
       if (error.message.includes("Already solved")) {
@@ -64,18 +66,10 @@ export function ChallengeItem({
     });
   };
 
-  const handleShowFlag = async () => {
-    try {
-      await getFlag.refetch();
-      setShowFlag(true);
-    } catch {
-      setMessage("Unable to show flag");
-    }
-  };
-
   const shouldShowInput =
-    !isAdmin && !challenge.hasCorrectSubmission && !isGameEnded;
-  const shouldShowFlag = isAdmin || challenge.hasCorrectSubmission || showFlag;
+    !isAdmin && !challenge.hasCorrectSubmission && !isGameEnded && !justSolved;
+  const shouldShowFlag =
+    isAdmin || challenge.hasCorrectSubmission || justSolved;
 
   // Auto-clear message after 5 seconds
   useEffect(() => {
@@ -173,11 +167,6 @@ export function ChallengeItem({
                 </span>
               </p>
             </div>
-            {!isAdmin && !challenge.hasCorrectSubmission && (
-              <button onClick={handleShowFlag} type="button">
-                Show flag
-              </button>
-            )}
           </div>
         )}
 

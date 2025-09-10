@@ -283,7 +283,7 @@ export const gameRouter = createTRPCRouter({
 
       // Create a map of challenge flags for server-side verification only
       const challengeFlags = new Map(
-        challenges.map((challenge) => [challenge.id, challenge.flag])
+        challenges.map((challenge) => [challenge.id, challenge.flag]),
       );
 
       // Filter for correct submissions and group by user

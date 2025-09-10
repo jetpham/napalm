@@ -1,5 +1,3 @@
-"use client";
-
 import { CreateGameForm } from "~/app/components/create-game";
 
 export function CreateGameTab() {

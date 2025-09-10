@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Tabs } from "radix-ui";
 import { GamesTab } from "~/app/components/tabs/games-tab";
 import { CreateGameTab } from "~/app/components/tabs/create-game-tab";
@@ -6,6 +7,8 @@ import { SignIn } from "~/app/components/signin";
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
 import UsernameSetup from "./components/username-setup";
+
+export const experimental_ppr = true;
 
 export default async function Home() {
   const session = await auth();
@@ -40,17 +43,23 @@ export default async function Home() {
               </Tabs.List>
 
               <Tabs.Content value="games" className="mt-4">
-                <GamesTab />
+                <Suspense fallback={<div>Loading games...</div>}>
+                  <GamesTab />
+                </Suspense>
               </Tabs.Content>
 
               {session.user.username === "jet" && (
                 <Tabs.Content value="create" className="mt-4">
-                  <CreateGameTab />
+                  <Suspense fallback={<div>Loading create game form...</div>}>
+                    <CreateGameTab />
+                  </Suspense>
                 </Tabs.Content>
               )}
 
               <Tabs.Content value="account" className="mt-4">
-                <AccountTab />
+                <Suspense fallback={<div>Loading account...</div>}>
+                  <AccountTab />
+                </Suspense>
               </Tabs.Content>
             </Tabs.Root>
           ) : (

@@ -8,16 +8,15 @@ interface LeaderboardProps {
   isAdmin?: boolean;
 }
 
-export async function Leaderboard({ 
-  gameId, 
-  maxListed, 
-  currentUserId, 
-  isAdmin = false 
+export async function Leaderboard({
+  gameId,
+  maxListed,
+  currentUserId,
+  isAdmin = false,
 }: LeaderboardProps) {
   // Fetch data server-side
-  const [leaderboard, game] = await Promise.all([
+  const [leaderboard] = await Promise.all([
     api.game.getLeaderboard({ gameId }),
-    api.game.getById({ id: gameId }),
   ]);
 
   // If we have no data or it's empty

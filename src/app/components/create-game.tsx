@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
 import { Form, Toggle } from "radix-ui";
 import { api } from "~/trpc/react";
 
@@ -17,7 +16,7 @@ export function CreateGameForm() {
   const utils = api.useUtils();
   const createGame = api.game.create.useMutation({
     onSuccess: (game) => {
-      void utils.game.getAll.invalidate();
+      void utils.game.getMyGames.invalidate();
       router.push(`/game/${game.id}`);
     },
   });

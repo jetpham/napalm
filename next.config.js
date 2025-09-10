@@ -6,6 +6,9 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  experimental: {
+    ppr: "incremental",
+  },
   turbopack: {
     rules: {
       "*.utf8ans": {

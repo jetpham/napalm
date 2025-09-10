@@ -99,17 +99,15 @@ export const challengeRouter = createTRPCRouter({
 
       // Check if user is admin
       const isAdmin = challenge.game.adminId === ctx.session.user.id;
-      
-      // Check if user has a correct submission (without exposing the flag in the query)
-      const userSubmission = await ctx.db.submission.findFirst({
+
+      // Check if user has any submission with the same flag as the challenge flag
+      const hasCorrectSubmission = await ctx.db.submission.findFirst({
         where: {
           challengeId: input.challengeId,
           userId: ctx.session.user.id,
+          flag: challenge.flag, // Direct comparison in the query
         },
       });
-
-      // Verify if the submission is correct by comparing with the challenge flag
-      const hasCorrectSubmission = userSubmission && userSubmission.flag === challenge.flag;
 
       if (!isAdmin && !hasCorrectSubmission) {
         throw new Error("Not authorized to view flag");

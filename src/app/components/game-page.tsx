@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Separator } from "radix-ui";
 import { ChallengeList } from "./challenge-list";
@@ -38,20 +39,26 @@ export async function GamePage({ gameId, userId, isAdmin }: GamePageProps) {
         </div>
         <div>
           <div>
-            <Leaderboard 
-              gameId={gameId} 
-              maxListed={10}
-              currentUserId={userId}
-              isAdmin={isAdmin}
-            />
+            <Suspense fallback={<div>Loading leaderboard...</div>}>
+              <Leaderboard
+                gameId={gameId}
+                maxListed={10}
+                currentUserId={userId}
+                isAdmin={isAdmin}
+              />
+            </Suspense>
           </div>
 
           <Separator.Root />
 
           <div>
-            <ChallengeList gameId={gameId} userId={userId} />
+            <Suspense fallback={<div>Loading challenges...</div>}>
+              <ChallengeList gameId={gameId} userId={userId} />
+            </Suspense>
             <Separator.Root />
-            <CreateChallengeForm gameId={gameId} userId={userId} />
+            <Suspense fallback={<div>Loading create challenge form...</div>}>
+              <CreateChallengeForm gameId={gameId} userId={userId} />
+            </Suspense>
           </div>
         </div>
       </div>

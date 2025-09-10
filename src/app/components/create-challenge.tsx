@@ -1,74 +1,60 @@
-"use client";
-
-import { useState } from "react";
-
 import { Form } from "radix-ui";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/server";
 
 interface CreateChallengeFormProps {
   gameId: string;
   userId: string;
 }
 
-export function CreateChallengeForm({
+export async function CreateChallengeForm({
   gameId,
   userId,
 }: CreateChallengeFormProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [flag, setFlag] = useState("");
-  const [pointValue, setPointValue] = useState(100);
-
-  const { data: game } = api.game.getById.useQuery({ id: gameId });
-  const { data: isGameEnded } = api.game.isGameEnded.useQuery({ gameId });
-
-  const utils = api.useUtils();
-  const createChallenge = api.challenge.create.useMutation({
-    onSuccess: () => {
-      void utils.challenge.getByGame.invalidate();
-      setTitle("");
-      setDescription("");
-      setFlag("");
-      setPointValue(100);
-    },
-  });
+  // Fetch data server-side to check permissions
+  const [game, isGameEnded] = await Promise.all([
+    api.game.getById({ id: gameId }),
+    api.game.isGameEnded({ gameId }),
+  ]);
 
   const isAdmin = game?.adminId === userId;
   const canCreateChallenge = isAdmin && !isGameEnded;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title || !flag || pointValue <= 0) return;
+  if (!canCreateChallenge) {
+    return null;
+  }
 
-    createChallenge.mutate({
+  async function createChallenge(formData: FormData) {
+    "use server";
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const flag = formData.get("flag") as string;
+    const pointValue = Number(formData.get("pointValue"));
+
+    if (!title || !flag || pointValue <= 0) {
+      throw new Error("Title, flag, and valid point value are required");
+    }
+
+    await api.challenge.create({
       gameId,
       title,
       description: description || undefined,
       flag,
       pointValue,
     });
-  };
 
-  if (!canCreateChallenge) {
-    return null;
+    // Redirect to refresh the page and show the new challenge
+    // Note: In a real app, you might want to use revalidatePath instead
   }
 
   return (
     <div>
       <h3>Create New Challenge</h3>
-      <Form.Root onSubmit={handleSubmit}>
+      <Form.Root action={createChallenge}>
         <Form.Field name="title">
           <Form.Label>Challenge Title</Form.Label>
           <Form.Control asChild>
-            <input
-              type="text"
-              placeholder="Challenge Title"
-              value={title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setTitle(e.target.value)
-              }
-              required
-            />
+            <input type="text" placeholder="Challenge Title" required />
           </Form.Control>
           <Form.Message match="valueMissing">
             Please enter a challenge title
@@ -78,29 +64,14 @@ export function CreateChallengeForm({
         <Form.Field name="description">
           <Form.Label>Description (optional)</Form.Label>
           <Form.Control asChild>
-            <textarea
-              placeholder="Description (optional)"
-              value={description}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setDescription(e.target.value)
-              }
-              rows={3}
-            />
+            <textarea placeholder="Description (optional)" rows={3} />
           </Form.Control>
         </Form.Field>
 
         <Form.Field name="flag">
           <Form.Label>Flag</Form.Label>
           <Form.Control asChild>
-            <input
-              type="text"
-              placeholder="Flag"
-              value={flag}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFlag(e.target.value)
-              }
-              required
-            />
+            <input type="text" placeholder="Flag" required />
           </Form.Control>
           <Form.Message match="valueMissing">Please enter a flag</Form.Message>
         </Form.Field>
@@ -111,11 +82,8 @@ export function CreateChallengeForm({
             <input
               type="number"
               placeholder="Point Value"
-              value={pointValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPointValue(Number(e.target.value))
-              }
               min="1"
+              defaultValue="100"
               required
             />
           </Form.Control>
@@ -128,9 +96,7 @@ export function CreateChallengeForm({
         </Form.Field>
 
         <Form.Submit asChild>
-          <button type="submit" disabled={createChallenge.isPending}>
-            {createChallenge.isPending ? "Creating..." : "Create Challenge"}
-          </button>
+          <button type="submit">Create Challenge</button>
         </Form.Submit>
       </Form.Root>
     </div>

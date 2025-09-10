@@ -4,6 +4,8 @@ import { GamePage } from "~/app/components/game-page";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
 
+export const experimental_ppr = true;
+
 interface GamePageProps {
   params: Promise<{ id: string }>;
 }
@@ -34,11 +36,7 @@ export default async function GamePageRoute({ params }: GamePageProps) {
 
   return (
     <HydrateClient>
-      <GamePage 
-        gameId={id} 
-        userId={session.user.id} 
-        isAdmin={isAdmin}
-      />
+      <GamePage gameId={id} userId={session.user.id} isAdmin={isAdmin} />
     </HydrateClient>
   );
 }

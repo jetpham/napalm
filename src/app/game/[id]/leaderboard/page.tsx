@@ -5,6 +5,8 @@ import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { Leaderboard } from "~/app/components/leaderboard";
 
+export const experimental_ppr = true;
+
 interface LeaderboardPageProps {
   params: Promise<{ id: string }>;
 }
@@ -42,8 +44,8 @@ export default async function LeaderboardPageRoute({
         </Link>
       </div>
       <h1 style={{ marginBottom: "1rem" }}>Full Leaderboard</h1>
-      <Leaderboard 
-        gameId={id} 
+      <Leaderboard
+        gameId={id}
         currentUserId={session.user.id}
         isAdmin={isAdmin}
       />

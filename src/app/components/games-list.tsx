@@ -1,20 +1,10 @@
-"use client";
-
 import Link from "next/link";
-
 import { Separator } from "radix-ui";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/server";
 
-export function GamesList() {
-  const { data: games, isLoading } = api.game.getMyGames.useQuery();
-
-  if (isLoading) {
-    return (
-      <div>
-        <div>Loading games...</div>
-      </div>
-    );
-  }
+export async function GamesList() {
+  // Fetch data server-side
+  const games = await api.game.getMyGames();
 
   if (!games || games.length === 0) {
     return (
