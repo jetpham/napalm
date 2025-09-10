@@ -23,12 +23,14 @@ export default async function Home() {
                 >
                   Games
                 </Tabs.Trigger>
-                <Tabs.Trigger
-                  value="create"
-                  className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
-                >
-                  Create Game
-                </Tabs.Trigger>
+                {session.user.username === "jet" && (
+                  <Tabs.Trigger
+                    value="create"
+                    className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
+                  >
+                    Create Game
+                  </Tabs.Trigger>
+                )}
                 <Tabs.Trigger
                   value="account"
                   className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"
@@ -41,9 +43,11 @@ export default async function Home() {
                 <GamesTab />
               </Tabs.Content>
 
-              <Tabs.Content value="create" className="mt-4">
-                <CreateGameTab />
-              </Tabs.Content>
+              {session.user.username === "jet" && (
+                <Tabs.Content value="create" className="mt-4">
+                  <CreateGameTab />
+                </Tabs.Content>
+              )}
 
               <Tabs.Content value="account" className="mt-4">
                 <AccountTab />

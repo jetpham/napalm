@@ -23,7 +23,6 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
   if (gameLoading || challengesLoading) {
     return (
       <div>
-        <h2>Challenges</h2>
         <div>Loading...</div>
       </div>
     );
@@ -32,7 +31,6 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
   if (!game) {
     return (
       <div>
-        <h2>Challenges</h2>
         <div>Game not found.</div>
       </div>
     );
@@ -59,7 +57,6 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
       <Separator.Root />
 
       <section>
-        <h2>Challenges</h2>
         {!challenges || challenges.length === 0 ? (
           <p>No challenges yet.</p>
         ) : (
