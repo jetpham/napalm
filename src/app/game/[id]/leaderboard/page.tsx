@@ -9,7 +9,9 @@ interface LeaderboardPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function LeaderboardPageRoute({ params }: LeaderboardPageProps) {
+export default async function LeaderboardPageRoute({
+  params,
+}: LeaderboardPageProps) {
   const { id } = await params;
   const session = await auth();
 
@@ -34,9 +36,9 @@ export default async function LeaderboardPageRoute({ params }: LeaderboardPagePr
     <HydrateClient>
       <div>
         <div className="-mt-2" style={{ marginBottom: "1rem" }}>
-          <Link 
+          <Link
             href={`/game/${id}`}
-            className="text-[var(--light-blue)] underline hover:bg-[var(--blue)] hover:text-[var(--white)] px-4 py-2"
+            className="px-4 py-2 text-[var(--light-blue)] underline hover:bg-[var(--blue)] hover:text-[var(--white)]"
           >
             {"<- Back to Game"}
           </Link>

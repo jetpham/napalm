@@ -21,7 +21,5 @@ export default function Napalm() {
 
   const randomArt = lines.slice(startIndex, endIndex).join("\n");
 
-  return (
-      <Ansi className="select-none">{randomArt}</Ansi>
-  );
+  return <Ansi className="select-none">{randomArt}</Ansi>;
 }

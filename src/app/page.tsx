@@ -16,7 +16,7 @@ export default async function Home() {
         {session?.user ? (
           session.user.username ? (
             <Tabs.Root defaultValue="games" className="w-full">
-              <Tabs.List className="mb-6 flex -mt-2">
+              <Tabs.List className="-mt-2 mb-6 flex">
                 <Tabs.Trigger
                   value="games"
                   className="px-4 py-2 text-[var(--light-gray)] hover:bg-[var(--blue)] hover:text-[var(--white)] data-[state=active]:text-[var(--light-blue)] data-[state=active]:hover:bg-[var(--white)] data-[state=active]:hover:text-[var(--light-blue)]"

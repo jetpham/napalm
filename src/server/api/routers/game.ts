@@ -173,6 +173,7 @@ export const gameRouter = createTRPCRouter({
     .input(
       z.object({
         title: z.string().min(1),
+        description: z.string().optional(),
         endingTime: z.date().refine((date) => date > new Date(), {
           message: "Ending time must be in the future",
         }),
@@ -185,6 +186,7 @@ export const gameRouter = createTRPCRouter({
         const game = await tx.game.create({
           data: {
             title: input.title,
+            description: input.description,
             endingTime: input.endingTime,
             isPublic: input.isPublic,
             adminId: ctx.session.user.id,
@@ -426,6 +428,7 @@ export const gameRouter = createTRPCRouter({
       z.object({
         gameId: z.string(),
         title: z.string().min(1).optional(),
+        description: z.string().optional(),
         endingTime: z.date().optional(),
         isPublic: z.boolean().optional(),
       }),
@@ -446,10 +449,13 @@ export const gameRouter = createTRPCRouter({
 
       const updateData: {
         title?: string;
+        description?: string;
         endingTime?: Date;
         isPublic?: boolean;
       } = {};
       if (input.title !== undefined) updateData.title = input.title;
+      if (input.description !== undefined)
+        updateData.description = input.description;
       if (input.endingTime !== undefined)
         updateData.endingTime = input.endingTime;
       if (input.isPublic !== undefined) updateData.isPublic = input.isPublic;

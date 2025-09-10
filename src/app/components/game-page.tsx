@@ -15,16 +15,24 @@ export function GamePage({ gameId, userId }: GamePageProps) {
   return (
     <main>
       <div>
-        <div className="-mt-2" style={{ marginBottom: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Link 
+        <div
+          className="-mt-2"
+          style={{
+            marginBottom: "1rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Link
             href="/"
-            className="text-[var(--light-blue)] underline hover:bg-[var(--blue)] hover:text-[var(--white)] px-4 py-2"
+            className="px-4 py-2 text-[var(--light-blue)] underline hover:bg-[var(--blue)] hover:text-[var(--white)]"
           >
             {"<- Back to Home"}
           </Link>
-          <Link 
+          <Link
             href={`/game/${gameId}/leaderboard`}
-            className="text-[var(--light-blue)] underline hover:bg-[var(--blue)] hover:text-[var(--white)] px-4 py-2"
+            className="px-4 py-2 text-[var(--light-blue)] underline hover:bg-[var(--blue)] hover:text-[var(--white)]"
           >
             {"Full Leaderboard ->"}
           </Link>

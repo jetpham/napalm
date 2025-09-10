@@ -83,7 +83,7 @@ export function ChallengeItem({
       const timer = setTimeout(() => {
         setMessage("");
       }, 3000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [message]);
@@ -93,13 +93,13 @@ export function ChallengeItem({
       <article>
         <header className="flex items-center pb-2">
           <div className="flex-1"></div>
-          <h3 className="bg-[var(--dark-gray)] text-[var(--white)] px-2">
+          <h3 className="bg-[var(--dark-gray)] px-2 text-[var(--white)]">
             {challenge.title}
           </h3>
-          <div className="flex-1 flex justify-end">
-            <span 
+          <div className="flex flex-1 justify-end">
+            <span
               aria-label={`${challenge.pointValue} points`}
-              className="bg-[var(--green)] text-[var(--white)] font-bold px-2"
+              className="bg-[var(--green)] px-2 font-bold text-[var(--white)]"
             >
               {challenge.pointValue} points
             </span>
@@ -108,94 +108,102 @@ export function ChallengeItem({
 
         {challenge.description && (
           <div className="bg-[var(--light-gray)] text-[var(--black)]">
-            <p className="pl-2 break-words whitespace-pre-wrap">{challenge.description}</p>
+            <p className="pl-2 break-words whitespace-pre-wrap">
+              {challenge.description}
+            </p>
           </div>
         )}
 
         <Separator.Root />
 
-      {shouldShowInput && (
-        <Form.Root onSubmit={handleSubmit}>
-          <Form.Field name="flag">
-            <div className="flex">
-              <Form.Control asChild>
-                <input
-                  type="text"
-                  placeholder="Enter flag"
-                  value={flag}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setFlag(e.target.value);
-                    // Clear any previous error message when user starts typing
-                    if (message) {
-                      setMessage("");
-                    }
-                  }}
-                  className="flex-1 pl-2 text-[var(--dark-gray)]"
-                />
-              </Form.Control>
-              <Form.Submit asChild>
-                <button 
-                  type="submit" 
-                  className="disabled:cursor-not-allowed"
-                  disabled={submitFlag.isPending || !flag.trim()}
-                >
-                  <div className="px-4 py-2 bg-[var(--dark-gray)] text-[var(--white)] hover:bg-[var(--white)] hover:text-[var(--red)] disabled:bg-transparent disabled:text-[var(--dark-gray)]">
-                    {submitFlag.isPending ? "Submitting..." : "Submit Flag"}
-                  </div>
-                </button>
-              </Form.Submit>
-            </div>
-          </Form.Field>
-        </Form.Root>
-      )}
+        {shouldShowInput && (
+          <Form.Root onSubmit={handleSubmit}>
+            <Form.Field name="flag">
+              <div className="flex">
+                <Form.Control asChild>
+                  <input
+                    type="text"
+                    placeholder="Enter flag"
+                    value={flag}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setFlag(e.target.value);
+                      // Clear any previous error message when user starts typing
+                      if (message) {
+                        setMessage("");
+                      }
+                    }}
+                    className="flex-1 pl-2 text-[var(--dark-gray)]"
+                  />
+                </Form.Control>
+                <Form.Submit asChild>
+                  <button
+                    type="submit"
+                    className="disabled:cursor-not-allowed"
+                    disabled={submitFlag.isPending || !flag.trim()}
+                  >
+                    <div className="bg-[var(--dark-gray)] px-4 py-2 text-[var(--white)] hover:bg-[var(--white)] hover:text-[var(--red)] disabled:bg-transparent disabled:text-[var(--dark-gray)]">
+                      {submitFlag.isPending ? "Submitting..." : "Submit Flag"}
+                    </div>
+                  </button>
+                </Form.Submit>
+              </div>
+            </Form.Field>
+          </Form.Root>
+        )}
 
-      {shouldShowInput && shouldShowFlag && <Separator.Root />}
+        {shouldShowInput && shouldShowFlag && <Separator.Root />}
 
-      {shouldShowFlag && (
-        <div>
+        {shouldShowFlag && (
           <div>
-            <p className="text-[var(--dark-gray)] pl-2 py-2">
-              Flag:{""}
-              <span className={
-                (getFlag.isLoading 
-                  ? "text-[var(--yellow)]" 
-                  : getFlag.data 
-                    ? "bg-[var(--green)] text-[var(--white)]"
-                    : "bg-[var(--red)] text-[var(--white)]")
-             + " px-2"}>
-                {getFlag.isLoading
-                  ? "Loading..."
-                  : (getFlag.data ?? "Unable to load flag")}
-              </span>
+            <div>
+              <p className="py-2 pl-2 text-[var(--dark-gray)]">
+                Flag:{""}
+                <span
+                  className={
+                    (getFlag.isLoading
+                      ? "text-[var(--yellow)]"
+                      : getFlag.data
+                        ? "bg-[var(--green)] text-[var(--white)]"
+                        : "bg-[var(--red)] text-[var(--white)]") + " px-2"
+                  }
+                >
+                  {getFlag.isLoading
+                    ? "Loading..."
+                    : (getFlag.data ?? "Unable to load flag")}
+                </span>
+              </p>
+            </div>
+            {!isAdmin && !challenge.hasCorrectSubmission && (
+              <button onClick={handleShowFlag} type="button">
+                Show flag
+              </button>
+            )}
+          </div>
+        )}
+
+        {isGameEnded && !shouldShowInput && !shouldShowFlag && (
+          <div>
+            <p>Game has ended</p>
+          </div>
+        )}
+
+        {message && (
+          <div role="status" aria-live="polite" className="text-center">
+            <p
+              className={
+                message.includes("Correct!")
+                  ? "bg-[var(--green)] text-[var(--white)]"
+                  : message.includes("already") ||
+                      message.includes("Incorrect") ||
+                      message.includes("Error")
+                    ? "bg-[var(--red)] text-[var(--white)]"
+                    : "bg-[var(--blue)] text-[var(--white)]"
+              }
+            >
+              {message}
             </p>
           </div>
-          {!isAdmin && !challenge.hasCorrectSubmission && (
-            <button onClick={handleShowFlag} type="button">
-              Show flag
-            </button>
-          )}
-        </div>
-      )}
-
-      {isGameEnded && !shouldShowInput && !shouldShowFlag && (
-        <div>
-          <p>Game has ended</p>
-        </div>
-      )}
-
-      {message && (
-        <div role="status" aria-live="polite" className="text-center">
-          <p className={
-            message.includes("Correct!") 
-              ? "bg-[var(--green)] text-[var(--white)]"
-              : message.includes("already") || message.includes("Incorrect") || message.includes("Error")
-              ? "bg-[var(--red)] text-[var(--white)]"
-              : "bg-[var(--blue)] text-[var(--white)]"
-            }>
-            {message}
-          </p>
-        </div>
-      )}
+        )}
       </article>
     </div>
   );

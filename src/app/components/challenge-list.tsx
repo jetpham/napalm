@@ -42,6 +42,9 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
     <div>
       <header>
         <h1>{game.title}</h1>
+        {game.description && (
+          <p className="mb-2 text-[var(--light-gray)]">{game.description}</p>
+        )}
         <p>
           Created by{" "}
           <span style={{ color: "var(--yellow)" }}>{game.admin.username}</span>

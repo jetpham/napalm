@@ -8,6 +8,7 @@ import { api } from "~/trpc/react";
 
 export function CreateGameForm() {
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [endingTime, setEndingTime] = useState("");
   const [dateError, setDateError] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
@@ -37,6 +38,7 @@ export function CreateGameForm() {
 
     createGame.mutate({
       title,
+      description: description || undefined,
       endingTime: endingDate,
       isPublic: !isPrivate,
     });
@@ -61,6 +63,20 @@ export function CreateGameForm() {
           <Form.Message match="valueMissing">
             Please enter a game title
           </Form.Message>
+        </Form.Field>
+
+        <Form.Field name="description">
+          <Form.Label>Description (Optional)</Form.Label>
+          <Form.Control asChild>
+            <textarea
+              placeholder="Describe your game..."
+              value={description}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setDescription(e.target.value)
+              }
+              rows={3}
+            />
+          </Form.Control>
         </Form.Field>
 
         <Form.Field name="endingTime">

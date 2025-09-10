@@ -17,6 +17,7 @@ datasource db {
 model Game {
     id          String   @id @default(cuid())
     title       String
+    description String?
     createdAt   DateTime @default(now())
     endingTime  DateTime
     
