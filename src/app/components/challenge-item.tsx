@@ -30,7 +30,7 @@ export function ChallengeItem({
   const submitFlag = api.submission.submit.useMutation({
     onSuccess: () => {
       // If we get here, the submission was correct
-      setMessage("Correct! 🎉");
+      setMessage("Correct!");
       setFlag("");
       void utils.challenge.getByGame.invalidate();
       void utils.game.getLeaderboard.invalidate();
@@ -78,42 +78,63 @@ export function ChallengeItem({
   const shouldShowFlag = isAdmin || challenge.hasCorrectSubmission || showFlag;
 
   return (
-    <article>
-      <header>
-        <h3>{challenge.title}</h3>
-        <span aria-label={`${challenge.pointValue} points`}>
-          {challenge.pointValue} points
-        </span>
-      </header>
+    <div className="bg-[var(--light-gray)]">
+      <article>
+        <header className="flex items-center">
+          <div className="flex-1"></div>
+          <h3 className="bg-[var(--dark-gray)] text-[var(--white)] px-2">
+            {challenge.title}
+          </h3>
+          <div className="flex-1 flex justify-end">
+            <span 
+              aria-label={`${challenge.pointValue} points`}
+              className="bg-[var(--green)] text-[var(--white)] font-bold"
+            >
+              {challenge.pointValue} points
+            </span>
+          </div>
+        </header>
 
-      {challenge.description && <p>{challenge.description}</p>}
+        {challenge.description && (
+          <div className="bg-[var(--light-gray)] text-[var(--black)]">
+            <p className="pl-2 break-words whitespace-pre-wrap">{challenge.description}</p>
+          </div>
+        )}
 
-      <Separator.Root />
+        <Separator.Root />
 
       {shouldShowInput && (
         <Form.Root onSubmit={handleSubmit}>
           <Form.Field name="flag">
-            <Form.Label>Enter flag</Form.Label>
-            <Form.Control asChild>
-              <input
-                type="text"
-                placeholder="Enter flag"
-                value={flag}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setFlag(e.target.value)
-                }
-                required
-              />
-            </Form.Control>
-            <Form.Message match="valueMissing">
-              Please enter a flag
-            </Form.Message>
+            <div className="flex">
+              <Form.Control asChild>
+                <input
+                  type="text"
+                  placeholder="Enter flag"
+                  value={flag}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setFlag(e.target.value);
+                    // Clear any previous error message when user starts typing
+                    if (message) {
+                      setMessage("");
+                    }
+                  }}
+                  className="flex-1 pl-2"
+                />
+              </Form.Control>
+              <Form.Submit asChild>
+                <button 
+                  type="submit" 
+                  className="disabled:cursor-not-allowed"
+                  disabled={submitFlag.isPending || !flag.trim()}
+                >
+                  <div className="px-4 py-2 bg-[var(--dark-gray)] text-[var(--white)] hover:bg-[var(--white)] hover:text-[var(--red)] disabled:bg-transparent disabled:text-[var(--dark-gray)]">
+                    {submitFlag.isPending ? "Submitting..." : "Submit Flag"}
+                  </div>
+                </button>
+              </Form.Submit>
+            </div>
           </Form.Field>
-          <Form.Submit asChild>
-            <button type="submit" disabled={submitFlag.isPending}>
-              {submitFlag.isPending ? "Submitting..." : "Submit Flag"}
-            </button>
-          </Form.Submit>
         </Form.Root>
       )}
 
@@ -144,10 +165,19 @@ export function ChallengeItem({
       )}
 
       {message && (
-        <div role="status" aria-live="polite">
-          {message}
+        <div role="status" aria-live="polite" className="text-center">
+          <p className={
+            message.includes("Correct!") 
+              ? "bg-[var(--green)] text-[var(--white)]"
+              : message.includes("already") || message.includes("Incorrect") || message.includes("Error")
+              ? "bg-[var(--red)] text-[var(--white)]"
+              : "bg-[var(--blue)] text-[var(--white)]"
+            }>
+            {message}
+          </p>
         </div>
       )}
-    </article>
+      </article>
+    </div>
   );
 }

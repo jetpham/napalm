@@ -65,7 +65,7 @@ export function ChallengeList({ gameId, userId }: ChallengeListProps) {
         ) : (
           <div role="list" aria-label="Game challenges">
             {challenges.map((challenge, index) => (
-              <div key={challenge.id} role="listitem">
+              <div key={challenge.id} role="listitem" className="py-2">
                 <ChallengeItem
                   challenge={challenge}
                   isAdmin={isAdmin}

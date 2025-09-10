@@ -9,14 +9,12 @@ export default async function Header() {
     <header className="w-full p-4">
       <div className="flex flex-col items-center gap-2">
         <div className="flex w-full justify-center">
-          <Link 
-      href="/" 
-      className="inline-block cursor-pointer max-w-full overflow-hidden"
-    >
-
+          <Link
+            href="/"
+            className="inline-block max-w-full cursor-pointer overflow-hidden"
+          >
             <Napalm />
-    </Link>
-
+          </Link>
         </div>
         {session && (
           <div className="flex w-full justify-end">

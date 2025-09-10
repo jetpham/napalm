@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { api } from "~/trpc/react";
 
 interface LeaderboardProps {
@@ -12,11 +13,21 @@ export function Leaderboard({
   gameId, 
   maxListed
 }: LeaderboardProps) {
+  const [isClient, setIsClient] = useState(false);
   const { data: leaderboard, isLoading } = api.game.getLeaderboard.useQuery({
     gameId,
   });
   const { data: currentUser } = api.account.getMe.useQuery();
   const { data: game } = api.game.getById.useQuery({ id: gameId });
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Prevent hydration mismatch by not rendering until client-side
+  if (!isClient) {
+    return <div>Loading...</div>;
+  }
 
   // Show loading state only if we're actually loading and have no data
   if (isLoading && leaderboard === undefined) {
