@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Form, Separator } from "radix-ui";
 import { api } from "~/trpc/react";
@@ -77,10 +77,21 @@ export function ChallengeItem({
     !isAdmin && !challenge.hasCorrectSubmission && !isGameEnded;
   const shouldShowFlag = isAdmin || challenge.hasCorrectSubmission || showFlag;
 
+  // Auto-clear message after 5 seconds
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage("");
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   return (
     <div className="bg-[var(--light-gray)]">
       <article>
-        <header className="flex items-center">
+        <header className="flex items-center pb-2">
           <div className="flex-1"></div>
           <h3 className="bg-[var(--dark-gray)] text-[var(--white)] px-2">
             {challenge.title}
@@ -88,7 +99,7 @@ export function ChallengeItem({
           <div className="flex-1 flex justify-end">
             <span 
               aria-label={`${challenge.pointValue} points`}
-              className="bg-[var(--green)] text-[var(--white)] font-bold"
+              className="bg-[var(--green)] text-[var(--white)] font-bold px-2"
             >
               {challenge.pointValue} points
             </span>
@@ -119,7 +130,7 @@ export function ChallengeItem({
                       setMessage("");
                     }
                   }}
-                  className="flex-1 pl-2"
+                  className="flex-1 pl-2 text-[var(--dark-gray)]"
                 />
               </Form.Control>
               <Form.Submit asChild>
@@ -143,11 +154,19 @@ export function ChallengeItem({
       {shouldShowFlag && (
         <div>
           <div>
-            <p>
-              Flag:{" "}
-              {getFlag.isLoading
-                ? "Loading..."
-                : (getFlag.data ?? "Unable to load flag")}
+            <p className="text-[var(--dark-gray)] pl-2 py-2">
+              Flag:{""}
+              <span className={
+                (getFlag.isLoading 
+                  ? "text-[var(--yellow)]" 
+                  : getFlag.data 
+                    ? "bg-[var(--green)] text-[var(--white)]"
+                    : "bg-[var(--red)] text-[var(--white)]")
+             + " px-2"}>
+                {getFlag.isLoading
+                  ? "Loading..."
+                  : (getFlag.data ?? "Unable to load flag")}
+              </span>
             </p>
           </div>
           {!isAdmin && !challenge.hasCorrectSubmission && (
