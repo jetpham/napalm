@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { Separator } from "radix-ui";
 import { ChallengeList } from "./challenge-list";
@@ -9,9 +7,10 @@ import { Leaderboard } from "./leaderboard";
 interface GamePageProps {
   gameId: string;
   userId: string;
+  isAdmin: boolean;
 }
 
-export function GamePage({ gameId, userId }: GamePageProps) {
+export async function GamePage({ gameId, userId, isAdmin }: GamePageProps) {
   return (
     <main>
       <div>
@@ -39,7 +38,12 @@ export function GamePage({ gameId, userId }: GamePageProps) {
         </div>
         <div>
           <div>
-            <Leaderboard gameId={gameId} />
+            <Leaderboard 
+              gameId={gameId} 
+              maxListed={10}
+              currentUserId={userId}
+              isAdmin={isAdmin}
+            />
           </div>
 
           <Separator.Root />

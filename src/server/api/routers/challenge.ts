@@ -59,12 +59,23 @@ export const challengeRouter = createTRPCRouter({
         },
       });
 
-      return challenges.map((challenge) => ({
-        ...challenge,
-        hasCorrectSubmission: challenge.submissions.some(
+      return challenges.map((challenge) => {
+        // Check if user has a correct submission without exposing the flag
+        const hasCorrectSubmission = challenge.submissions.some(
           (sub) => sub.flag === challenge.flag,
-        ),
-      }));
+        );
+
+        // Return challenge data without the flag
+        return {
+          id: challenge.id,
+          title: challenge.title,
+          description: challenge.description,
+          pointValue: challenge.pointValue,
+          createdAt: challenge.createdAt,
+          gameId: challenge.gameId,
+          hasCorrectSubmission,
+        };
+      });
     }),
 
   getFlag: usernameRequiredProcedure
@@ -86,17 +97,19 @@ export const challengeRouter = createTRPCRouter({
         throw new Error("Challenge not found");
       }
 
-      // Check if user is admin or has correct submission
+      // Check if user is admin
       const isAdmin = challenge.game.adminId === ctx.session.user.id;
+      
+      // Check if user has a correct submission (without exposing the flag in the query)
       const userSubmission = await ctx.db.submission.findFirst({
         where: {
           challengeId: input.challengeId,
           userId: ctx.session.user.id,
-          flag: challenge.flag, // Only get submissions with the correct flag
         },
       });
 
-      const hasCorrectSubmission = !!userSubmission;
+      // Verify if the submission is correct by comparing with the challenge flag
+      const hasCorrectSubmission = userSubmission && userSubmission.flag === challenge.flag;
 
       if (!isAdmin && !hasCorrectSubmission) {
         throw new Error("Not authorized to view flag");

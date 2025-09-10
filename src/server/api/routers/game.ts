@@ -19,7 +19,17 @@ export const gameRouter = createTRPCRouter({
             username: true,
           },
         },
-        challenges: true,
+        challenges: {
+          select: {
+            // Only include safe challenge data - NO FLAGS
+            id: true,
+            title: true,
+            description: true,
+            pointValue: true,
+            createdAt: true,
+            gameId: true,
+          },
+        },
         _count: {
           select: {
             challenges: true,
@@ -69,7 +79,17 @@ export const gameRouter = createTRPCRouter({
             username: true,
           },
         },
-        challenges: true,
+        challenges: {
+          select: {
+            // Only include safe challenge data - NO FLAGS
+            id: true,
+            title: true,
+            description: true,
+            pointValue: true,
+            createdAt: true,
+            gameId: true,
+          },
+        },
         participants: {
           where: {
             userId: ctx.session.user.id,
@@ -129,6 +149,15 @@ export const gameRouter = createTRPCRouter({
           challenges: {
             orderBy: {
               pointValue: "asc",
+            },
+            select: {
+              // Only include safe challenge data - NO FLAGS
+              id: true,
+              title: true,
+              description: true,
+              pointValue: true,
+              createdAt: true,
+              gameId: true,
             },
           },
           participants: {
@@ -216,7 +245,19 @@ export const gameRouter = createTRPCRouter({
   getLeaderboard: publicProcedure
     .input(z.object({ gameId: z.string() }))
     .query(async ({ ctx, input }) => {
-      // Get all submissions for this game
+      // Get all challenges for this game with their correct flags (server-side only)
+      const challenges = await ctx.db.challenge.findMany({
+        where: {
+          gameId: input.gameId,
+        },
+        select: {
+          id: true,
+          pointValue: true,
+          flag: true, // Server-side only - not exposed to client
+        },
+      });
+
+      // Get all submissions for this game (without exposing flags)
       const submissions = await ctx.db.submission.findMany({
         where: {
           challenge: {
@@ -232,12 +273,18 @@ export const gameRouter = createTRPCRouter({
           },
           challenge: {
             select: {
+              id: true,
               pointValue: true,
-              flag: true,
+              // NO FLAG EXPOSED HERE - this is the key fix
             },
           },
         },
       });
+
+      // Create a map of challenge flags for server-side verification only
+      const challengeFlags = new Map(
+        challenges.map((challenge) => [challenge.id, challenge.flag])
+      );
 
       // Filter for correct submissions and group by user
       const userScores = new Map<
@@ -250,8 +297,9 @@ export const gameRouter = createTRPCRouter({
       >();
 
       for (const submission of submissions) {
-        // Check if submission is correct by comparing flags
-        if (submission.flag === submission.challenge.flag) {
+        // Check if submission is correct by comparing with stored challenge flag
+        const correctFlag = challengeFlags.get(submission.challenge.id);
+        if (correctFlag && submission.flag === correctFlag) {
           const userId = submission.user.id;
           if (!userScores.has(userId)) {
             userScores.set(userId, {

@@ -1,45 +1,26 @@
-"use client";
-
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/server";
 
 interface LeaderboardProps {
   gameId: string;
   maxListed?: number;
+  currentUserId?: string;
+  isAdmin?: boolean;
 }
 
-export function Leaderboard({ gameId, maxListed }: LeaderboardProps) {
-  const [isClient, setIsClient] = useState(false);
-  const { data: leaderboard, isLoading } = api.game.getLeaderboard.useQuery({
-    gameId,
-  });
-  const { data: currentUser } = api.account.getMe.useQuery();
-  const { data: game } = api.game.getById.useQuery({ id: gameId });
+export async function Leaderboard({ 
+  gameId, 
+  maxListed, 
+  currentUserId, 
+  isAdmin = false 
+}: LeaderboardProps) {
+  // Fetch data server-side
+  const [leaderboard, game] = await Promise.all([
+    api.game.getLeaderboard({ gameId }),
+    api.game.getById({ id: gameId }),
+  ]);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Prevent hydration mismatch by not rendering until client-side
-  if (!isClient) {
-    return (
-      <div className="flex w-full items-center justify-center py-8">
-        Loading...
-      </div>
-    );
-  }
-
-  // Show loading state only if we're actually loading and have no data
-  if (isLoading && leaderboard === undefined) {
-    return (
-      <div className="flex w-full items-center justify-center py-8">
-        Loading...
-      </div>
-    );
-  }
-
-  // If we have data but it's empty, or if we have no data (but not loading)
+  // If we have no data or it's empty
   if (!leaderboard || leaderboard.length === 0) {
     return (
       <div className="flex w-full items-center justify-center py-8">
@@ -48,12 +29,11 @@ export function Leaderboard({ gameId, maxListed }: LeaderboardProps) {
     );
   }
 
-  const isAdmin = game?.adminId === currentUser?.id;
-  const currentUserEntry = currentUser
-    ? leaderboard.find((entry) => entry.user.id === currentUser.id)
+  const currentUserEntry = currentUserId
+    ? leaderboard.find((entry) => entry.user.id === currentUserId)
     : null;
   const currentUserRank = currentUserEntry
-    ? leaderboard.findIndex((entry) => entry.user.id === currentUser!.id) + 1
+    ? leaderboard.findIndex((entry) => entry.user.id === currentUserId) + 1
     : null;
 
   // Determine how many players to show
@@ -65,7 +45,7 @@ export function Leaderboard({ gameId, maxListed }: LeaderboardProps) {
 
     // If current user is not in the displayed list and not admin, replace last user
     if (
-      currentUser &&
+      currentUserId &&
       !isAdmin &&
       currentUserRank &&
       currentUserRank > maxListed
@@ -89,7 +69,7 @@ export function Leaderboard({ gameId, maxListed }: LeaderboardProps) {
   };
 
   const getRowStyle = (entry: (typeof leaderboard)[0], _index: number) => {
-    const isCurrentUser = currentUser?.id === entry.user.id;
+    const isCurrentUser = currentUserId === entry.user.id;
     if (isCurrentUser) {
       return {
         backgroundColor: "var(--dark-gray)",
@@ -149,9 +129,7 @@ export function Leaderboard({ gameId, maxListed }: LeaderboardProps) {
         <tbody>
           {displayList.map((entry, index) => {
             const actualRank = getActualRank(entry);
-            const isCurrentUser = currentUser?.id === entry.user.id;
-            // const isLastReplaced =
-            //   showCurrentUserAtEnd && index === displayList.length - 1;
+            const isCurrentUser = currentUserId === entry.user.id;
 
             return (
               <tr key={entry.user.id} style={getRowStyle(entry, index)}>

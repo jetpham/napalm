@@ -26,14 +26,19 @@ export default async function GamePageRoute({ params }: GamePageProps) {
     notFound();
   }
 
-  // Prefetch data for the game page
-  void api.game.getLeaderboard.prefetch({ gameId: id });
+  const isAdmin = game.adminId === session.user.id;
+
+  // Prefetch data for the game page (for client components)
   void api.challenge.getByGame.prefetch({ gameId: id });
   void api.game.isGameEnded.prefetch({ gameId: id });
 
   return (
     <HydrateClient>
-      <GamePage gameId={id} userId={session.user.id} />
+      <GamePage 
+        gameId={id} 
+        userId={session.user.id} 
+        isAdmin={isAdmin}
+      />
     </HydrateClient>
   );
 }
